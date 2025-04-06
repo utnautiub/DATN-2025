@@ -17,14 +17,14 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: postgres
-  password: postgres
-  host: db
+  password: 123456
+  host: localhost
   port: 5432
 
 
 development:
   <<: *default
-  database: e_learning_db
+  database: e_learning_db_dev
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -58,7 +58,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: e_learning_backend_test
+  database: e_learning_db_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -83,18 +83,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: e_learning_backend_production
+    database: e_learning_db_production
     username: e_learning_backend
     password: <%= ENV["E_LEARNING_BACKEND_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: e_learning_backend_production_cache
+    database: e_learning_db_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: e_learning_backend_production_queue
+    database: e_learning_db_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: e_learning_backend_production_cable
+    database: e_learning_db_production_cable
     migrations_paths: db/cable_migrate
