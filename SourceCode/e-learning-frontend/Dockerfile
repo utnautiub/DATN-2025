@@ -4,7 +4,7 @@ FROM node:22
 WORKDIR /app
 
 # Sao chép package.json và cài đặt npm dependencies
-COPY package.json ./
+COPY package.json package-lock.json* ./
 RUN npm install
 
 # Sao chép toàn bộ mã nguồn

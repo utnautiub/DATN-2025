@@ -1,96 +1,15 @@
-# General ignores for OS and editors
+# Ignore Documents folder if it contains temporary files
+/Documents/*.log
+/Documents/*.tmp
+
+# Ignore IDE/Editor files at root
+.idea/
+.vscode/
+
+# Ignore macOS files
 .DS_Store
-Thumbs.db
-*.log
+
+# Ignore any global temp files
 *.swp
 *.swo
-.vscode/
-.idea/
-*.iml
-
-# Node.js / NuxtJS (Frontend: e-learning-frontend)
-node_modules/
-npm-debug.log
-yarn-error.log
-# NuxtJS specific
-.nuxt/
-dist/
-.output/
-.data/
-.nitro/
-.cache/
-
-logs/
-*.log
-
-.DS_Store
-.fleet
-.idea
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Ruby on Rails (Backend: e-learning-backend)
-# Logs
-log/*
-!log/.keep
-
-# Temporary files
-tmp/*
-!tmp/.keep
-*.pid
-*.seed
-*.rdb
-
-# Ignore uploaded files in development
-public/system/*
-public/uploads/*
-public/packs/*
-public/assets/*
-!public/packs/.keep
-!public/assets/.keep
-
-# Ignore Ruby gems
-vendor/bundle/
-.bundle/
-*.Gemfile.lock/
-
-# Ignore Rails secrets and credentials
-config/secrets.yml
-config/master.key
-config/credentials.yml.enc
-# Nếu bạn có các file credentials khác
-config/credentials/*.key
-
-# Ignore database files (PostgreSQL)
-db/*.sqlite3
-db/*.sqlite3-journal
-*.sql
-*.sql.gz
-pgdata/
-
-# Docker
-docker-compose.override.yml
-
-# Testing and Coverage
-coverage/
-spec/examples.txt
-.rspec_status
-
-# Build artifacts
-*.gem
-*.rbc
-*.war
-*.ear
-
-# Other miscellaneous
-*.bak
-*.gho
-*.orig
-*.tmp
-
-
-
-
+*~

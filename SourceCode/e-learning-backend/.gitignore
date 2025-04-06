@@ -1,0 +1,47 @@
+# Ruby/Rails specific
+*.rbc
+capybara-*.html
+.rspec
+/log
+/log/*
+!/log/.keep
+/tmp
+/tmp/*
+!/tmp/.keep
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+# Ignore uploaded files in development
+/storage
+/storage/*
+!/storage/.keep
+
+# Ignore compiled assets
+/public/assets
+/public/packs
+/public/packs-test
+
+# Ignore Bundler config
+/.bundle
+/vendor/bundle
+
+# Ignore environment variables
+.env
+.env.*
+/config/master.key
+/config/credentials/*.key
+
+# Ignore logs and temp files
+*.log
+.byebug_history
+
+# Node.js (nếu dùng trong Rails, ví dụ webpacker)
+node_modules
+/yarn-error.log
+
+# macOS
+.DS_Store
+
+# IDE/Editor
+.idea
+.vscode
