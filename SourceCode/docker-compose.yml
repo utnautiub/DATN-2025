@@ -1,0 +1,45 @@
+services:
+  backend:
+    build:
+      context: ./e-learning-backend
+      dockerfile: Dockerfile
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 3000"
+    volumes:
+      - ./e-learning-backend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - RAILS_ENV=development
+
+  frontend:
+    build:
+      context: ./e-learning-frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    volumes:
+      - ./e-learning-frontend:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:17
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=e_learning_db
+    ports:
+      - "5433:5432"
+
+volumes:
+  pgdata:
