@@ -1,0 +1,151 @@
+{
+  "common": {
+    "appName": "Học trực tuyến Đại Học Thủy Lợi",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "home": "Trang chủ",
+    "courses": "Khóa học",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "backToHome": "Quay lại trang chủ",
+    "search": "Tìm kiếm",
+    "viewAll": "Xem tất cả",
+    "welcome": "Xin chào",
+    "settings": "Cài đặt",
+    "profile": "Hồ sơ",
+    "language": "Ngôn ngữ",
+    "theme": "Giao diện",
+    "darkMode": "Chế độ tối",
+    "lightMode": "Chế độ sáng",
+    "colorThemes": "Màu sắc giao diện"
+  },
+  "login": {
+    "title": "Đăng nhập vào hệ thống",
+    "quickLogin": "Đăng nhập nhanh cho việc thử nghiệm:",
+    "admin": "Quản trị viên",
+    "teacher": "Giảng viên",
+    "student": "Học viên",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng",
+    "error": "Có lỗi xảy ra khi đăng nhập"
+  },
+  "admin": {
+    "dashboard": "Dashboard Quản trị viên",
+    "welcome": "Xin chào Admin, chào mừng trở lại với hệ thống quản trị.",
+    "users": "Quản lý người dùng",
+    "courses": "Quản lý khóa học",
+    "reports": "Báo cáo",
+    "settings": "Cài đặt hệ thống",
+    "stats": {
+      "totalUsers": "Tổng người dùng",
+      "courses": "Khóa học",
+      "completed": "Hoàn thành",
+      "revenue": "Doanh thu"
+    },
+    "recentActivity": {
+      "title": "Hoạt động gần đây"
+    },
+    "newUsers": {
+      "title": "Người dùng mới"
+    },
+    "quickActions": {
+      "title": "Thao tác nhanh"
+    }
+  },
+  "teacher": {
+    "dashboard": "Dashboard Giảng viên",
+    "welcome": "Xin chào Giảng viên, chào mừng trở lại với hệ thống quản lý khóa học.",
+    "myCourses": "Khóa học của tôi",
+    "assignments": "Bài tập",
+    "students": "Học viên",
+    "calendar": "Lịch giảng dạy",
+    "messages": "Tin nhắn",
+    "stats": {
+      "myCourses": "Khóa học của tôi",
+      "students": "Học viên",
+      "ratings": "Đánh giá",
+      "income": "Thu nhập"
+    }
+  },
+  "student": {
+    "dashboard": "Dashboard Học viên",
+    "welcome": "Xin chào {name}, chào mừng trở lại với hành trình học tập của bạn.",
+    "myCourses": "Khóa học của tôi",
+    "progress": "Tiến độ học tập",
+    "assignments": "Bài tập",
+    "catalog": "Danh mục khóa học",
+    "messages": "Tin nhắn",
+    "stats": {
+      "coursesInProgress": "Khóa học đang học",
+      "coursesCompleted": "Khóa học đã hoàn thành",
+      "certificatesEarned": "Chứng chỉ đạt được",
+      "learningHours": "Giờ học tập"
+    },
+    "learningStreak": {
+      "title": "Streak học tập",
+      "days": "ngày liên tiếp",
+      "keepStreak": "Duy trì streak để nhận phần thưởng!"
+    }
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "courses": "Khóa học",
+    "history": "Lịch sử",
+    "about": "Giới thiệu"
+  },
+  "landing": {
+    "hero": {
+      "title": "Kiến thức là sức mạnh - Học mọi lúc, mọi nơi",
+      "subtitle": "Nền tảng học trực tuyến với hàng ngàn khóa học từ các giảng viên giỏi nhất",
+      "startLearning": "Bắt đầu học ngay",
+      "exploreCourses": "Khám phá khóa học"
+    },
+    "courses": {
+      "title": "Khóa học nổi bật",
+      "description": "Khám phá các khóa học phổ biến nhất được hàng nghìn học viên lựa chọn",
+      "viewAll": "Xem tất cả khóa học",
+      "popular": "Phổ biến",
+      "webDevelopment": "Phát triển Web",
+      "dataScience": "Khoa học dữ liệu",
+      "mobileDev": "Phát triển Mobile",
+      "fullstackTitle": "Fullstack Web Development",
+      "fullstackDescription": "Học cách xây dựng ứng dụng web từ đầu đến cuối với React và Node.js",
+      "mlTitle": "Machine Learning cơ bản",
+      "mlDescription": "Học các thuật toán Machine Learning phổ biến và cách ứng dụng chúng",
+      "flutterTitle": "Flutter for Beginners",
+      "flutterDescription": "Tạo ứng dụng di động đa nền tảng với Flutter và Dart",
+      "instructor1": "Nguyễn Văn A",
+      "instructor2": "Trần Thị B",
+      "instructor3": "Lê Văn C",
+      "price1": "599.000đ",
+      "price2": "799.000đ",
+      "price3": "699.000đ"
+    },
+    "about": {
+      "title": "Tại sao chọn chúng tôi",
+      "description": "Chúng tôi cung cấp nền tảng giáo dục chất lượng cao với đội ngũ giảng viên chuyên nghiệp và nguồn tài liệu học tập đa dạng",
+      "courseVariety": "Đa dạng khóa học",
+      "professionalInstructors": "Giảng viên chuyên nghiệp",
+      "registeredStudents": "Học viên đã đăng ký",
+      "satisfactionRate": "Tỷ lệ hài lòng",
+      "contactUs": "Liên hệ với chúng tôi"
+    },
+    "contact": {
+      "title": "Liên hệ",
+      "description": "Bạn có thắc mắc? Chúng tôi rất mong được nghe từ bạn. Hãy gửi tin nhắn và chúng tôi sẽ phản hồi sớm nhất có thể",
+      "name": "Họ và tên",
+      "email": "Email",
+      "subject": "Tiêu đề",
+      "message": "Nội dung",
+      "sendMessage": "Gửi tin nhắn",
+      "namePlaceholder": "Nhập họ và tên",
+      "emailPlaceholder": "Nhập email",
+      "subjectPlaceholder": "Nhập tiêu đề",
+      "messagePlaceholder": "Nhập nội dung"
+    }
+  }
+}
+

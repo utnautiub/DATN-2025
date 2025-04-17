@@ -1,0 +1,25 @@
+/* Prevent flash when page refreshes */
+html {
+  visibility: visible !important;
+}
+
+body {
+  visibility: hidden;
+}
+
+body.theme-loaded {
+  visibility: visible;
+}
+
+/* Default light mode styles */
+:root {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode styles */
+:root.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+

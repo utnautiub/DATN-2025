@@ -1,0 +1,132 @@
+{
+  "languages": {
+    "en": "English",
+    "vi": "Tiếng Việt",
+    "lo": "ພາສາລາວ"
+  },
+  "navigation": {
+    "home": "ໜ້າຫຼັກ",
+    "courses": "ຫຼັກສູດ",
+    "history": "ປະຫວັດການຮຽນ",
+    "about": "ກ່ຽວກັບ",
+    "profile": "ໂປຣໄຟລ໌",
+    "settings": "ຕັ້ງຄ່າ"
+  },
+  "auth": {
+    "login": "ເຂົ້າສູ່ລະບົບ",
+    "register": "ລົງທະບຽນ",
+    "logout": "ອອກຈາກລະບົບ",
+    "email": "ອີເມວ",
+    "password": "ລະຫັດຜ່ານ",
+    "confirmPassword": "ຢືນຢັນລະຫັດຜ່ານ",
+    "forgotPassword": "ລືມລະຫັດຜ່ານ?",
+    "rememberMe": "ຈົດຈຳການເຂົ້າສູ່ລະບົບ",
+    "loginSuccess": "ເຂົ້າສູ່ລະບົບສຳເລັດ",
+    "loginFailed": "ເຂົ້າສູ່ລະບົບລົ້ມເຫລວ",
+    "registerSuccess": "ລົງທະບຽນສຳເລັດ",
+    "registerFailed": "ລົງທະບຽນລົ້ມເຫລວ"
+  },
+  "common": {
+    "appName": "ຮຽນອອນລາຍ",
+    "search": "ຄົ້ນຫາ",
+    "loading": "ກຳລັງໂຫຼດ...",
+    "error": "ເກີດຂໍ້ຜິດພາດ",
+    "success": "ສຳເລັດ",
+    "cancel": "ຍົກເລີກ",
+    "save": "ບັນທຶກ",
+    "edit": "ແກ້ໄຂ",
+    "delete": "ລຶບ",
+    "confirm": "ຢືນຢັນ",
+    "back": "ກັບຄືນ",
+    "next": "ຕໍ່ໄປ",
+    "previous": "ກ່ອນໜ້າ",
+    "welcome": "ຍິນດີຕ້ອນຮັບ",
+    "selectLanguage": "ເລືອກພາສາ"
+  },
+  "profile": {
+    "title": "ໂປຣໄຟລ໌",
+    "editProfile": "ແກ້ໄຂໂປຣໄຟລ໌",
+    "changePassword": "ປ່ຽນລະຫັດຜ່ານ",
+    "settings": "ຕັ້ງຄ່າ",
+    "personalInfo": "ຂໍ້ມູນສ່ວນຕົວ",
+    "fullName": "ຊື່ ແລະ ນາມສະກຸນ",
+    "phoneNumber": "ເບີໂທລະສັບ",
+    "address": "ທີ່ຢູ່",
+    "birthday": "ວັນເດືອນປີເກີດ",
+    "gender": "ເພດ",
+    "male": "ຊາຍ",
+    "female": "ຍິງ",
+    "other": "ອື່ນໆ"
+  },
+  "courses": {
+    "title": "ຫຼັກສູດ",
+    "allCourses": "ຫຼັກສູດທັງໝົດ",
+    "myCourses": "ຫຼັກສູດຂອງຂ້ອຍ",
+    "popularCourses": "ຫຼັກສູດຍອດນິຍົມ",
+    "newCourses": "ຫຼັກສູດໃໝ່",
+    "freeCourses": "ຫຼັກສູດຟຣີ",
+    "paidCourses": "ຫຼັກສູດທີ່ຕ້ອງຈ່າຍ",
+    "courseDetails": "ລາຍລະອຽດຫຼັກສູດ",
+    "enrollNow": "ລົງທະບຽນດຽວນີ້",
+    "startLearning": "ເລີ່ມຮຽນ",
+    "continueLeaning": "ຮຽນຕໍ່",
+    "completed": "ສຳເລັດແລ້ວ",
+    "inProgress": "ກຳລັງຮຽນ",
+    "notStarted": "ຍັງບໍ່ໄດ້ເລີ່ມ"
+  },
+  "validation": {
+    "required": "ຕ້ອງປ້ອນຂໍ້ມູນ",
+    "email": "ອີເມວບໍ່ຖືກຕ້ອງ",
+    "minLength": "ຕ້ອງມີຢ່າງໜ້ອຍ {length} ຕົວອັກສອນ",
+    "maxLength": "ຕ້ອງມີບໍ່ເກີນ {length} ຕົວອັກສອນ",
+    "passwordMatch": "ລະຫັດຜ່ານບໍ່ກົງກັນ",
+    "invalidFormat": "ຮູບແບບບໍ່ຖືກຕ້ອງ"
+  },
+  "landing": {
+    "hero": {
+      "title": "ປ່ຽນແປງອະນາຄົດຂອງທ່ານດ້ວຍການຮຽນອອນລາຍ",
+      "subtitle": "ເຂົ້າເຖິງການສຶກສາລະດັບໂລກຈາກທຸກບ່ອນ. ຮຽນຕາມຈັງຫວະຂອງທ່ານເອງກັບຫຼັກສູດທີ່ນຳພາໂດຍຜູ້ຊ່ຽວຊານ",
+      "startLearning": "ເລີ່ມຮຽນ",
+      "exploreCourses": "ສຳຫຼວດຫຼັກສູດ"
+    },
+    "courses": {
+      "title": "ຫຼັກສູດແນະນຳ",
+      "description": "ຄົ້ນພົບຫຼັກສູດທີ່ນິຍົມທີ່ສຸດຂອງພວກເຮົາທີ່ຖືກເລືອກໂດຍຜູ້ຮຽນຫຼາຍພັນຄົນ",
+      "viewAll": "ເບິ່ງທຸກຫຼັກສູດ",
+      "popular": "ນິຍົມ",
+      "webDevelopment": "ການພັດທະນາເວັບ",
+      "dataScience": "ວິທະຍາສາດຂໍ້ມູນ",
+      "mobileDev": "ການພັດທະນາແອັບມືຖື",
+      "fullstackTitle": "ຫຼັກສູດ Full Stack Web Development",
+      "fullstackDescription": "ຮຽນຮູ້ການພັດທະນາເວັບສະໄໝໃໝ່ດ້ວຍ JavaScript, React, Node.js ແລະ ອື່ນໆ",
+      "mlTitle": "ພື້ນຖານການຮຽນຮູ້ຂອງເຄື່ອງ & AI",
+      "mlDescription": "ຮຽນຮູ້ພື້ນຖານຂອງການຮຽນຮູ້ຂອງເຄື່ອງ ແລະ ປັນຍາປະດິດ",
+      "flutterTitle": "ການພັດທະນາແອັບມືຖືດ້ວຍ Flutter",
+      "flutterDescription": "ສ້າງແອັບມືຖືຂ້າມແພລດຟອມດ້ວຍ Flutter ແລະ Dart",
+      "instructor1": "ຈອນ ໂດ",
+      "instructor2": "ເຈນ ສະມິດ",
+      "instructor3": "ເດວິດ ຈອນສັນ",
+      "price1": "$99.99",
+      "price2": "$89.99",
+      "price3": "$79.99"
+    },
+    "about": {
+      "title": "ເປັນຫຍັງຈຶ່ງເລືອກພວກເຮົາ",
+      "description": "ພວກເຮົາໃຫ້ການສຶກສາທີ່ມີຄຸນນະພາບສູງກັບຄູສອນທີ່ມີຄວາມຊ່ຽວຊານ ແລະ ແຫຼ່ງການຮຽນຮູ້ທີ່ຄົບຖ້ວນ",
+      "courseVariety": "ຫຼັກສູດທີ່ຫຼາກຫຼາຍ",
+      "professionalInstructors": "ຄູສອນມືອາຊີບ",
+      "registeredStudents": "ນັກຮຽນທີ່ລົງທະບຽນ",
+      "satisfactionRate": "ອັດຕາຄວາມພໍໃຈ",
+      "contactUs": "ຕິດຕໍ່ພວກເຮົາ"
+    },
+    "contact": {
+      "title": "ຕິດຕໍ່ພວກເຮົາ",
+      "description": "ມີຄຳຖາມບໍ? ພວກເຮົາຢາກໄດ້ຍິນຈາກທ່ານ. ສົ່ງຂໍ້ຄວາມຫາພວກເຮົາ ແລະ ພວກເຮົາຈະຕອບກັບໂດຍໄວທີ່ສຸດ",
+      "name": "ຊື່",
+      "email": "ອີເມວ",
+      "subject": "ຫົວຂໍ້",
+      "message": "ຂໍ້ຄວາມ",
+      "sendMessage": "ສົ່ງຂໍ້ຄວາມ"
+    }
+  }
+}

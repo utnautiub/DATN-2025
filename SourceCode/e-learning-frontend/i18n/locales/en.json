@@ -1,0 +1,132 @@
+{
+  "languages": {
+    "en": "English",
+    "vi": "Tiếng Việt",
+    "lo": "ພາສາລາວ"
+  },
+  "navigation": {
+    "home": "Home",
+    "courses": "Courses",
+    "history": "Learning History",
+    "about": "About",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember me",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "registerSuccess": "Registration successful",
+    "registerFailed": "Registration failed"
+  },
+  "common": {
+    "appName": "Online Learning Platform",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "welcome": "Welcome",
+    "selectLanguage": "Select Language"
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "settings": "Settings",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "birthday": "Birthday",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "courses": {
+    "title": "Courses",
+    "allCourses": "All Courses",
+    "myCourses": "My Courses",
+    "popularCourses": "Popular Courses",
+    "newCourses": "New Courses",
+    "freeCourses": "Free Courses",
+    "paidCourses": "Paid Courses",
+    "courseDetails": "Course Details",
+    "enrollNow": "Enroll Now",
+    "startLearning": "Start Learning",
+    "continueLeaning": "Continue Learning",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "minLength": "Minimum {length} characters",
+    "maxLength": "Maximum {length} characters",
+    "passwordMatch": "Passwords do not match",
+    "invalidFormat": "Invalid format"
+  },
+  "landing": {
+    "hero": {
+      "title": "Transform Your Future with Online Learning",
+      "subtitle": "Access world-class education from anywhere. Learn at your own pace with expert-led courses.",
+      "startLearning": "Start Learning",
+      "exploreCourses": "Explore Courses"
+    },
+    "courses": {
+      "title": "Featured Courses",
+      "description": "Discover our most popular courses chosen by thousands of learners",
+      "viewAll": "View All Courses",
+      "popular": "Popular",
+      "webDevelopment": "Web Development",
+      "dataScience": "Data Science",
+      "mobileDev": "Mobile Development",
+      "fullstackTitle": "Full Stack Web Development Bootcamp",
+      "fullstackDescription": "Master modern web development with JavaScript, React, Node.js, and more",
+      "mlTitle": "Machine Learning & AI Fundamentals",
+      "mlDescription": "Learn the foundations of Machine Learning and Artificial Intelligence",
+      "flutterTitle": "Flutter Mobile App Development",
+      "flutterDescription": "Build cross-platform mobile apps with Flutter and Dart",
+      "instructor1": "John Doe",
+      "instructor2": "Jane Smith",
+      "instructor3": "David Johnson",
+      "price1": "$99.99",
+      "price2": "$89.99",
+      "price3": "$79.99"
+    },
+    "about": {
+      "title": "Why Choose Us",
+      "description": "We provide high-quality education with expert instructors and comprehensive learning resources",
+      "courseVariety": "Diverse Course Selection",
+      "professionalInstructors": "Professional Instructors",
+      "registeredStudents": "Registered Students",
+      "satisfactionRate": "Satisfaction Rate",
+      "contactUs": "Contact Us"
+    },
+    "contact": {
+      "title": "Get in Touch",
+      "description": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "sendMessage": "Send Message"
+    }
+  }
+}

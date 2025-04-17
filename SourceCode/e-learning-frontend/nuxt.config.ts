@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     port: 4000
   },
 
-  css: ['~/assets/css/tailwind.css'],
+  css: ['~/assets/css/no-flash.css', '~/assets/css/tailwind.css'],
 
   vite: {
     plugins: [
@@ -20,6 +20,8 @@ export default defineNuxtConfig({
   modules: [
     'shadcn-nuxt',
     '@nuxtjs/color-mode',
+    '@vueuse/motion/nuxt',
+    '@nuxtjs/i18n',
   ],
   colorMode: {
     classSuffix: ''
@@ -32,4 +34,25 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui'
   },
+  runtimeConfig: {
+    public: {
+      nuxtApiBaseUrl: process.env.NUXT_API_BASE_URL,
+    },
+  },
+  i18n: {
+    langDir: './locales',
+    defaultLocale: 'vi',
+    locales: [
+      { code: 'vi', iso: 'vi-VN', file: 'vi.json', name: 'Tiếng Việt' },
+      { code: 'en', iso: 'en-US', file: 'en.json', name: 'English' },
+      { code: 'lo', iso: 'lo-LA', file: 'lo.json', name: 'ພາສາລາວ' }
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root'
+    },
+    strategy: 'prefix_except_default'
+  }
 })
+

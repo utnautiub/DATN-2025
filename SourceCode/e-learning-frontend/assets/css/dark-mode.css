@@ -1,0 +1,97 @@
+/* Dark mode styles */
+
+/* Apply dark theme to root when .dark class is present */
+.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-tertiary: #a0a0a0;
+  --border-color: #333333;
+  color-scheme: dark;
+}
+
+/* Base HTML element styles for dark mode */
+.dark body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Dark mode overrides for common components */
+.dark .bg-white {
+  background-color: var(--bg-secondary) !important;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: var(--bg-primary) !important;
+}
+
+.dark .text-gray-500 {
+  color: var(--text-tertiary) !important;
+}
+
+.dark .text-gray-600,
+.dark .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .border,
+.dark .border-gray-200,
+.dark .border-gray-100 {
+  border-color: var(--border-color) !important;
+}
+
+.dark .shadow,
+.dark .shadow-md,
+.dark .shadow-lg {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Header and navigation */
+.dark header.bg-white {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Course cards */
+.dark .bg-white.rounded-lg {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Form elements */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Buttons */
+.dark .btn-ghost {
+  color: var(--text-primary) !important;
+}
+
+.dark .btn-outline {
+  border-color: var(--text-secondary) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Dropdown menus */
+.dark .dropdown-content,
+.dark .menu {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Footer */
+.dark footer.bg-gray-800 {
+  background-color: #000000 !important;
+}
