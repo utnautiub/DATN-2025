@@ -1,7 +1,7 @@
 <template>
   <div>
     <header :class="cn(
-      'top-8 sm:top-4 z-50',
+      'top-0 sm:top-4 z-50',
       !isDisableHeaderScroll && 'sticky'
     )">
       <div :class="cn(
@@ -12,7 +12,7 @@
       )">
         <!-- Logo -->
         <div class="flex items-center gap-2">
-          <NuxtLink to="/" class="flex items-center"  @click="scrollToTop">
+          <NuxtLink to="/" class="flex items-center" @click="scrollToTop">
             <Logo />
           </NuxtLink>
         </div>
@@ -27,9 +27,9 @@
         <div class="flex items-center justify-end gap-2 min-w-[251px]">
           <LanguageSelector />
           <ThemeSwitcher />
-          <NuxtLink to="/login">
+          <NuxtLink :to="localePath('/login')" class="hidden sm:block">
             <Button>
-              <Label class="text-white">Đăng nhập</Label>
+              <Label class="text-white">{{ t('auth.login') }}</Label>
             </Button>
           </NuxtLink>
           <!-- Mobile Menu -->
@@ -59,6 +59,11 @@
                   @click="mobileMenuOpen = false">
                   {{ t(`navigation.${link.name}`) }}
                 </NuxtLink>
+                <NuxtLink :to="localePath('/login')" class="sm:hidden" @click="mobileMenuOpen = false">
+                  <Button>
+                    <Label class="text-white">{{ t('auth.login') }}</Label>
+                  </Button>
+                </NuxtLink>
               </div>
             </DrawerContent>
           </Drawer>
@@ -73,8 +78,8 @@
     <footer class="bg-[#0a1f77] text-white py-5 mt-auto">
       <div class="container mx-auto px-4">
         <div class="flex flex-col sm:flex-row sm:justify-between items-center text-sm">
-          <div >
-            <Logo :isFooter="true"/>
+          <div>
+            <Logo :isFooter="true" />
           </div>
           <div class="flex my-4 flex-col items-start gap-2">
             <span>Bản quyền thuộc về Trường Đại học Thủy Lợi</span>

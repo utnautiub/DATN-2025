@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex mt-[-72px ] items-center justify-center">
-    <Card class="p-8 rounded-lg shadow-md w-full max-w-md">
+    <Card class="p-8 sm:rounded-lg sm:shadow-md sm:border-solid border-none bg-card-none shadow-none w-full max-w-md">
       <div class="text-center mb-8">
         <h1 class="text-2xl font-bold text-primary">E-Learning</h1>
         <p class="mt-2">{{ t('login.title') }}</p>
@@ -69,7 +69,7 @@
       </div>
 
       <div class="mt-6 text-center">
-        <NuxtLink to="/" class="">
+        <NuxtLink :to="localePath('/')" class="">
           <Button>
             <Label class="text-white">{{ t('common.backToHome') }}</Label>
           </Button>
@@ -82,10 +82,12 @@
 <script lang="ts" setup>
 import { useLanguage } from '~/composables/useLanguage';
 import { useTheme } from '~/composables/useTheme';
+import { useLocalePath } from '#i18n';
 
 const router = useRouter();
 const { t } = useLanguage();
 const { isDark } = useTheme();
+const localePath = useLocalePath();
 
 const email = ref('');
 const password = ref('');
