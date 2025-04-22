@@ -18,16 +18,16 @@
         </div>
 
         <!-- Navigation Links -->
-        <div class="flex-1 items-center gap-3 justify-center hidden sm:flex">
+        <div class="flex-1 items-center gap-3 justify-center hidden lg:flex">
           <HeaderLink v-for="link in navigationLinks" :key="link.name" :title="t(`navigation.${link.name}`)"
             :href="localePath(link.to)" :class="{ 'active': isCurrentRoute(link.to) }" />
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center justify-end gap-2 min-w-[251px]">
+        <div class="flex items-center justify-end gap-2 lg:min-w-[251px]">
           <LanguageSelector />
           <ThemeSwitcher />
-          <NuxtLink :to="localePath('/login')" class="hidden sm:block">
+          <NuxtLink :to="localePath('/login')" class="hidden lg:block">
             <Button>
               <Label class="text-white">{{ t('auth.login') }}</Label>
             </Button>
@@ -36,12 +36,12 @@
           <Drawer v-model:open="mobileMenuOpen">
             <DrawerTrigger asChild>
               <Button variant="outline" size="icon"
-                class="border size-10 rounded-xl p-2 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors duration-300 sm:hidden">
+                class="border size-10 rounded-xl p-2 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors duration-300 lg:hidden">
                 <Icon icon="heroicons:bars-3-20-solid" class="h-6 w-6" />
               </Button>
             </DrawerTrigger>
 
-            <DrawerContent class="min-h-dvh">
+            <DrawerContent class="min-h-[95%]">
               <DrawerHeader class="flex justify-between">
                 <DrawerTitle class="flex items-center gap-2">
                   <NuxtLink to="/" class="flex items-center">
@@ -53,7 +53,7 @@
                 </Button>
               </DrawerHeader>
 
-              <div class="px-6 flex flex-col gap-4">
+              <div class="p-4 flex flex-col gap-4">
                 <NuxtLink v-for="link in navigationLinks" :key="link.name" :to="localePath(link.to)"
                   class="flex items-center gap-2 font-medium text-xl" :class="{ 'active': isCurrentRoute(link.to) }"
                   @click="mobileMenuOpen = false">
@@ -112,9 +112,7 @@ const route = useRoute();
 
 const navigationLinks = [
   { to: '/', name: 'home' },
-  { to: '/courses', name: 'courses' },
   { to: '/history', name: 'history' },
-  { to: '/about', name: 'about' }
 ];
 
 const isCurrentRoute = (path: string) => {

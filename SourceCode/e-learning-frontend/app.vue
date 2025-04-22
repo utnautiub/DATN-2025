@@ -7,6 +7,7 @@
       </NuxtLayout>
     </ClientOnly>
   </div>
+  <Toaster />
 </template>
 
 <script setup>
@@ -31,5 +32,3 @@ useHead({
   },
 });
 </script>
-
-

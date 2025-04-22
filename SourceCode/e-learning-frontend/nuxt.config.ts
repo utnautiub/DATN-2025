@@ -53,6 +53,10 @@ export default defineNuxtConfig({
       redirectOn: 'root'
     },
     strategy: 'prefix_except_default'
-  }
+  },
+  build: {
+    transpile: ['@vue-leaflet/vue-leaflet']
+  },
+  ssr: true
 })
 

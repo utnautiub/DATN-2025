@@ -1,99 +1,220 @@
 <template>
-  <div class="min-h-screen flex bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="bg-primary text-white w-64 flex-shrink-0 hidden md:block">
-      <div class="p-4 border-b border-primary-dark">
+  <div class="min-h-screen flex bg-background">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden md:flex w-72 flex-col border-r">
+      <div class="p-4 border-b">
         <NuxtLink to="/admin/dashboard" class="text-xl font-bold">E-Learning Admin</NuxtLink>
       </div>
-      <nav class="p-4">
-        <ul class="space-y-2">
-          <li>
-            <NuxtLink to="/admin/dashboard" class="flex items-center p-2 rounded hover:bg-primary-dark transition">
-              <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/admin/users" class="flex items-center p-2 rounded hover:bg-primary-dark transition">
-              <i class="fas fa-users mr-3"></i> Quản lý người dùng
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/admin/courses" class="flex items-center p-2 rounded hover:bg-primary-dark transition">
-              <i class="fas fa-book mr-3"></i> Quản lý khóa học
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/admin/reports" class="flex items-center p-2 rounded hover:bg-primary-dark transition">
-              <i class="fas fa-chart-bar mr-3"></i> Báo cáo
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/admin/settings" class="flex items-center p-2 rounded hover:bg-primary-dark transition">
-              <i class="fas fa-cog mr-3"></i> Cài đặt hệ thống
-            </NuxtLink>
-          </li>
-        </ul>
+      <nav class="flex-1 p-2">
+        <ScrollArea class="h-[calc(100vh-5rem)]">
+          <div class="space-y-1">
+            <Button v-for="item in menuItems" :key="item.path"
+              :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
+              <NuxtLink :to="item.path" class="flex items-center w-full">
+                <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                {{ item.label }}
+              </NuxtLink>
+            </Button>
+          </div>
+        </ScrollArea>
       </nav>
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
+    <div class="flex-1 flex flex-col">
       <!-- Header -->
-      <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
-        <!-- Mobile menu button -->
-        <button class="md:hidden text-gray-600">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
+      <header class="border-b flex items-center gap-4 p-2.5 sticky top-0 bg-background/80 backdrop-blur-md z-50">
+        <div class="flex items-center justify-between md:justify-end gap-4 w-full">
+          <!-- Mobile Menu Button -->
+          <Drawer v-model:open="mobileMenuOpen">
+            <DrawerTrigger asChild>
+              <Button variant="outline" size="icon"
+                class="border size-10 rounded-xl p-2 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors duration-300 md:hidden">
+                <Icon icon="heroicons:bars-3-20-solid" class="h-6 w-6" />
+              </Button>
+            </DrawerTrigger>
 
-        <!-- Search -->
-        <div class="hidden md:flex items-center flex-grow max-w-md mx-4">
-          <div class="relative w-full">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-              <i class="fas fa-search text-gray-400"></i>
-            </span>
-            <input
-              type="text"
-              placeholder="Tìm kiếm..."
-              class="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-          </div>
-        </div>
+            <DrawerContent class="min-h-[95%]">
+              <DrawerHeader class="border-b p-4 flex justify-between">
+                <DrawerTitle class="flex items-center gap-2">
+                  <NuxtLink to="/admin/dashboard" class="text-xl font-bold" @click="mobileMenuOpen = false">
+                    E-Learning Admin
+                  </NuxtLink>
+                </DrawerTitle>
+                <Button variant="outline" size="icon" class="size-8" @click="mobileMenuOpen = false">
+                  <Icon icon="heroicons:x-mark-20-solid" class="h-6 w-6" />
+                </Button>
+              </DrawerHeader>
+              <ScrollArea class="h-[calc(100vh-4rem)]">
+                <div class="p-4 space-y-1">
+                  <Button v-for="item in menuItems" :key="item.path"
+                    :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
+                    @click="mobileMenuOpen = false">
+                    <NuxtLink :to="item.path" class="flex items-center w-full">
+                      <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                      {{ item.label }}
+                    </NuxtLink>
+                  </Button>
+                </div>
+              </ScrollArea>
+            </DrawerContent>
+          </Drawer>
 
-        <!-- User menu -->
-        <div class="flex items-center space-x-4">
-          <div class="relative">
-            <button class="flex items-center text-gray-700 focus:outline-none">
-              <span class="mr-2 hidden md:inline-block">Admin</span>
-              <img
-                src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff"
-                alt="Avatar"
-                class="h-8 w-8 rounded-full object-cover"
-              />
-            </button>
-            <!-- Dropdown Menu -->
-            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
-              <NuxtLink to="/admin/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Hồ sơ</NuxtLink>
-              <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Đăng xuất
-              </button>
-            </div>
+          <!-- Actions -->
+          <div class="flex items-center justify-end gap-2">
+            <LanguageSelector />
+            <ThemeSwitcher />
+
+            <!-- User menu -->
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" class="relative h-10 w-10 rounded-full">
+                  <Avatar class="h-8 w-8">
+                    <AvatarImage src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff"
+                      alt="Avatar" />
+                    <AvatarFallback>AD</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-56" align="end">
+                <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <NuxtLink to="/admin/profile" class="flex items-center">
+                    <Icon icon="heroicons:user-circle" class="mr-2 h-4 w-4" />
+                    <span>Hồ sơ</span>
+                  </NuxtLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Icon icon="heroicons:cog-6-tooth" class="mr-2 h-4 w-4" />
+                  <span>Cài đặt</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem class="text-red-600">
+                  <Icon icon="heroicons:arrow-left-on-rectangle" class="mr-2 h-4 w-4" />
+                  <span>Đăng xuất</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 overflow-auto p-6 bg-gray-100">
+      <main class="flex-1 overflow-auto p-6">
         <slot />
       </main>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-// Admin layout
-// Note: middleware will be handled at the page level instead of layout level
+<script setup lang="ts">
+import { Icon } from '@iconify/vue';
+const route = useRoute()
+const mobileMenuOpen = ref(false)
+
+const menuItems = [
+  {
+    label: 'Dashboard',
+    path: '/admin/dashboard',
+    icon: 'heroicons:chart-bar'
+  },
+  {
+    label: 'Quản lý người dùng',
+    path: '/admin/users',
+    icon: 'heroicons:users'
+  },
+  {
+    label: 'Quản lý nhóm người dùng',
+    path: '/admin/user-groups',
+    icon: 'heroicons:user-group'
+  },
+  {
+    label: 'Quản lý chương trình đào tạo',
+    path: '/admin/training-programs',
+    icon: 'heroicons:book-open'
+  },
+  {
+    label: 'Quản lý môn học',
+    path: '/admin/subjects',
+    icon: 'heroicons:academic-cap'
+  },
+  {
+    label: 'Quản lý kế hoạch đào tạo',
+    path: '/admin/training-plans',
+    icon: 'heroicons:calendar'
+  },
+  {
+    label: 'Quản lý lớp học',
+    path: '/admin/classes',
+    icon: 'heroicons:building-office'
+  },
+  {
+    label: 'Quản lý lịch học',
+    path: '/admin/schedules',
+    icon: 'heroicons:clock'
+  },
+  {
+    label: 'Quản lý phòng học',
+    path: '/admin/classrooms',
+    icon: 'heroicons:home'
+  },
+  {
+    label: 'Cấu hình công cụ trực tuyến',
+    path: '/admin/online-tools',
+    icon: 'heroicons:video-camera'
+  },
+  {
+    label: 'Quản lý tài liệu',
+    path: '/admin/resources',
+    icon: 'heroicons:document-text'
+  },
+  {
+    label: 'Quản lý diễn đàn',
+    path: '/admin/forums',
+    icon: 'heroicons:chat-bubble-left-right'
+  },
+  {
+    label: 'Giám sát tiến độ học tập',
+    path: '/admin/learning-progress',
+    icon: 'heroicons:chart-pie'
+  },
+  {
+    label: 'Quản lý ngân hàng câu hỏi',
+    path: '/admin/question-bank',
+    icon: 'heroicons:question-mark-circle'
+  },
+  {
+    label: 'Quản lý kỳ thi',
+    path: '/admin/exams',
+    icon: 'heroicons:clipboard-document-check'
+  },
+  {
+    label: 'Quản lý ca thi',
+    path: '/admin/exam-sessions',
+    icon: 'heroicons:clock'
+  },
+  {
+    label: 'Quản lý học phí',
+    path: '/admin/fees',
+    icon: 'heroicons:currency-dollar'
+  },
+  {
+    label: 'Báo cáo tổng thể',
+    path: '/admin/reports',
+    icon: 'heroicons:document-chart-bar'
+  },
+  {
+    label: 'Phân tích dữ liệu',
+    path: '/admin/analytics',
+    icon: 'heroicons:chart-bar-square'
+  },
+  {
+    label: 'Quản lý thông báo',
+    path: '/admin/notifications',
+    icon: 'heroicons:megaphone'
+  }
+]
 </script>
 
-<style>
-/* Custom styles for admin layout */
-</style>
+<style scoped></style>

@@ -1,111 +1,208 @@
 <template>
-  <div class="min-h-screen flex bg-gray-100">
-    <!-- Sidebar -->
-    <aside class="bg-indigo-700 text-white w-64 flex-shrink-0 hidden md:block">
-      <div class="p-4 border-b border-indigo-800">
+  <div class="min-h-screen flex bg-background">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden md:flex w-72 flex-col border-r">
+      <div class="p-4 border-b">
         <NuxtLink to="/teacher/dashboard" class="text-xl font-bold">E-Learning Giảng viên</NuxtLink>
       </div>
-      <nav class="p-4">
-        <ul class="space-y-2">
-          <li>
-            <NuxtLink to="/teacher/dashboard" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/teacher/courses" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-book mr-3"></i> Khóa học của tôi
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/teacher/assignments" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-tasks mr-3"></i> Bài tập
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/teacher/students" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-user-graduate mr-3"></i> Học viên
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/teacher/calendar" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-calendar-alt mr-3"></i> Lịch giảng dạy
-            </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/teacher/messages" class="flex items-center p-2 rounded hover:bg-indigo-800 transition">
-              <i class="fas fa-envelope mr-3"></i> Tin nhắn
-            </NuxtLink>
-          </li>
-        </ul>
+      <nav class="flex-1 p-2">
+        <ScrollArea class="h-[calc(100vh-5rem)]">
+          <div class="space-y-1">
+            <Button v-for="item in menuItems" :key="item.path"
+              :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
+              <NuxtLink :to="item.path" class="flex items-center w-full">
+                <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                {{ item.label }}
+              </NuxtLink>
+            </Button>
+          </div>
+        </ScrollArea>
       </nav>
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
+    <div class="flex-1 flex flex-col">
       <!-- Header -->
-      <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
-        <!-- Mobile menu button -->
-        <button class="md:hidden text-gray-600">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
+      <header class="border-b flex items-center gap-4 p-2.5 sticky top-0 bg-background/80 backdrop-blur-md z-50">
+        <div class="flex items-center justify-between md:justify-end gap-4 w-full">
+          <!-- Mobile Menu Button -->
+          <Drawer v-model:open="mobileMenuOpen">
+            <DrawerTrigger asChild>
+              <Button variant="outline" size="icon"
+                class="border size-10 rounded-xl p-2 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors duration-300 md:hidden">
+                <Icon icon="heroicons:bars-3-20-solid" class="h-6 w-6" />
+              </Button>
+            </DrawerTrigger>
 
-        <!-- Search -->
-        <div class="hidden md:flex items-center flex-grow max-w-md mx-4">
-          <div class="relative w-full">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-              <i class="fas fa-search text-gray-400"></i>
-            </span>
-            <input
-              type="text"
-              placeholder="Tìm kiếm..."
-              class="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-600"
-            />
-          </div>
-        </div>
+            <DrawerContent class="min-h-[95%]">
+              <DrawerHeader class="border-b p-4 flex justify-between">
+                <DrawerTitle class="flex items-center gap-2">
+                  <NuxtLink to="/teacher/dashboard" class="text-xl font-bold" @click="mobileMenuOpen = false">
+                    E-Learning Giảng viên
+                  </NuxtLink>
+                </DrawerTitle>
+                <Button variant="outline" size="icon" class="size-8" @click="mobileMenuOpen = false">
+                  <Icon icon="heroicons:x-mark-20-solid" class="h-6 w-6" />
+                </Button>
+              </DrawerHeader>
+              <ScrollArea class="h-[calc(100vh-4rem)]">
+                <div class="p-4 space-y-1">
+                  <Button v-for="item in menuItems" :key="item.path"
+                    :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
+                    @click="mobileMenuOpen = false">
+                    <NuxtLink :to="item.path" class="flex items-center w-full">
+                      <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                      {{ item.label }}
+                    </NuxtLink>
+                  </Button>
+                </div>
+              </ScrollArea>
+            </DrawerContent>
+          </Drawer>
 
-        <!-- User menu -->
-        <div class="flex items-center space-x-4">
-          <!-- Notifications -->
-          <button class="text-gray-500 hover:text-gray-700 relative">
-            <i class="fas fa-bell text-xl"></i>
-            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
+          <!-- Actions -->
+          <div class="flex items-center justify-end gap-2">
+            <LanguageSelector />
+            <ThemeSwitcher />
 
-          <!-- Profile -->
-          <div class="relative">
-            <button class="flex items-center text-gray-700 focus:outline-none">
-              <span class="mr-2 hidden md:inline-block">Giảng viên</span>
-              <img
-                src="https://ui-avatars.com/api/?name=Teacher+User&background=4F46E5&color=fff"
-                alt="Avatar"
-                class="h-8 w-8 rounded-full object-cover"
-              />
-            </button>
-            <!-- Dropdown Menu -->
-            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
-              <NuxtLink to="/teacher/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Hồ sơ</NuxtLink>
-              <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Đăng xuất
-              </button>
-            </div>
+            <!-- User menu -->
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" class="relative h-10 w-10 rounded-full">
+                  <Avatar class="h-8 w-8">
+                    <AvatarImage src="https://ui-avatars.com/api/?name=Teacher+User&background=4F46E5&color=fff"
+                      alt="Avatar" />
+                    <AvatarFallback>TC</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-56" align="end">
+                <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <NuxtLink to="/teacher/profile" class="flex items-center">
+                    <Icon icon="heroicons:user-circle" class="mr-2 h-4 w-4" />
+                    <span>Hồ sơ</span>
+                  </NuxtLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Icon icon="heroicons:cog-6-tooth" class="mr-2 h-4 w-4" />
+                  <span>Cài đặt</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem class="text-red-600">
+                  <Icon icon="heroicons:arrow-left-on-rectangle" class="mr-2 h-4 w-4" />
+                  <span>Đăng xuất</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 overflow-auto p-6 bg-gray-100">
+      <main class="flex-1 overflow-auto p-6">
         <slot />
       </main>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-// Teacher layout
-// Note: middleware will be handled at the page level instead of layout level
-</script>
+<script setup lang="ts">
+import { Icon } from '@iconify/vue';
+const route = useRoute()
+const mobileMenuOpen = ref(false)
 
-<style>
-/* Custom styles for teacher layout */
-</style>
+const menuItems = [
+  {
+    label: 'Dashboard',
+    path: '/teacher/dashboard',
+    icon: 'heroicons:chart-bar'
+  },
+  {
+    label: 'Khóa học của tôi',
+    path: '/teacher/courses',
+    icon: 'heroicons:academic-cap'
+  },
+  {
+    label: 'Điểm danh',
+    path: '/teacher/attendance',
+    icon: 'heroicons:check-circle'
+  },
+  {
+    label: 'Học viên',
+    path: '/teacher/students',
+    icon: 'heroicons:users'
+  },
+  {
+    label: 'Bài giảng',
+    path: '/teacher/lessons',
+    icon: 'heroicons:book-open'
+  },
+  {
+    label: 'Tài liệu',
+    path: '/teacher/resources',
+    icon: 'heroicons:document-text'
+  },
+  {
+    label: 'Lớp học trực tuyến',
+    path: '/teacher/online-classes',
+    icon: 'heroicons:video-camera'
+  },
+  {
+    label: 'Bài kiểm tra',
+    path: '/teacher/quizzes',
+    icon: 'heroicons:question-mark-circle'
+  },
+  {
+    label: 'Bài tập',
+    path: '/teacher/assignments',
+    icon: 'heroicons:clipboard-document-list'
+  },
+  {
+    label: 'Chấm điểm',
+    path: '/teacher/grading',
+    icon: 'heroicons:pencil-square'
+  },
+  {
+    label: 'Diễn đàn',
+    path: '/teacher/forums',
+    icon: 'heroicons:chat-bubble-left-right'
+  },
+  {
+    label: 'Tin nhắn',
+    path: '/teacher/messages',
+    icon: 'heroicons:envelope'
+  },
+  {
+    label: 'Thông báo',
+    path: '/teacher/notifications',
+    icon: 'heroicons:bell'
+  },
+  {
+    label: 'Phân tích học tập',
+    path: '/teacher/analytics',
+    icon: 'heroicons:chart-pie'
+  },
+  {
+    label: 'Giám sát kỳ thi',
+    path: '/teacher/exam-supervision',
+    icon: 'heroicons:eye'
+  },
+  {
+    label: 'Ngân hàng câu hỏi',
+    path: '/teacher/question-bank',
+    icon: 'heroicons:question-mark-circle'
+  },
+  {
+    label: 'Phê duyệt kết quả thi',
+    path: '/teacher/exam-results',
+    icon: 'heroicons:check-badge'
+  },
+  {
+    label: 'Cài đặt thông báo',
+    path: '/teacher/notification-settings',
+    icon: 'heroicons:cog-6-tooth'
+  }
+]
+</script>
