@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_04_185049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -159,6 +159,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.string "code"
   end
 
   create_table "enrollments", force: :cascade do |t|
@@ -280,6 +281,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.string "code"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -357,6 +359,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.string "student_code"
+    t.index ["student_code"], name: "index_students_on_student_code", unique: true
   end
 
   create_table "subject_assignments", force: :cascade do |t|
@@ -416,6 +420,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.string "teacher_code"
+    t.index ["teacher_code"], name: "index_teachers_on_teacher_code", unique: true
   end
 
   create_table "training_program_subjects", force: :cascade do |t|
@@ -440,7 +446,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_161613) do
   create_table "users", force: :cascade do |t|
     t.bigint "school_id"
     t.string "username"
-    t.string "password"
+    t.string "password_digest"
     t.string "role"
     t.string "admin_level"
     t.string "google_access_token"

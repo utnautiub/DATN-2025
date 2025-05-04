@@ -136,7 +136,8 @@
           <ul class="divide-y">
             <li class="py-3 flex items-center justify-between">
               <div class="flex items-center">
-                <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=2563EB&color=fff" alt="User" class="h-10 w-10 rounded-full">
+                <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=2563EB&color=fff" alt="User"
+                  class="h-10 w-10 rounded-full">
                 <div class="ml-4">
                   <p class="text-sm font-medium">Nguyễn Văn A</p>
                   <p class="text-xs text-gray-500">student@example.com</p>
@@ -146,7 +147,8 @@
             </li>
             <li class="py-3 flex items-center justify-between">
               <div class="flex items-center">
-                <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=7C3AED&color=fff" alt="User" class="h-10 w-10 rounded-full">
+                <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=7C3AED&color=fff" alt="User"
+                  class="h-10 w-10 rounded-full">
                 <div class="ml-4">
                   <p class="text-sm font-medium">Trần Thị B</p>
                   <p class="text-xs text-gray-500">teacher@example.com</p>
@@ -156,7 +158,8 @@
             </li>
             <li class="py-3 flex items-center justify-between">
               <div class="flex items-center">
-                <img src="https://ui-avatars.com/api/?name=Le+Van+C&background=2563EB&color=fff" alt="User" class="h-10 w-10 rounded-full">
+                <img src="https://ui-avatars.com/api/?name=Le+Van+C&background=2563EB&color=fff" alt="User"
+                  class="h-10 w-10 rounded-full">
                 <div class="ml-4">
                   <p class="text-sm font-medium">Lê Văn C</p>
                   <p class="text-xs text-gray-500">student2@example.com</p>
@@ -166,7 +169,8 @@
             </li>
             <li class="py-3 flex items-center justify-between">
               <div class="flex items-center">
-                <img src="https://ui-avatars.com/api/?name=Pham+Van+D&background=2563EB&color=fff" alt="User" class="h-10 w-10 rounded-full">
+                <img src="https://ui-avatars.com/api/?name=Pham+Van+D&background=2563EB&color=fff" alt="User"
+                  class="h-10 w-10 rounded-full">
                 <div class="ml-4">
                   <p class="text-sm font-medium">Phạm Văn D</p>
                   <p class="text-xs text-gray-500">student3@example.com</p>
@@ -205,8 +209,9 @@
 </template>
 
 <script lang="ts" setup>
-// Admin dashboard page
 import { useLanguage } from '~/composables/useLanguage';
+import { onMounted } from 'vue';
+import { navigateTo } from '#app';
 
 // Set the layout for this page
 definePageMeta({
@@ -219,7 +224,7 @@ const { t } = useLanguage();
 // Check if user is logged in and is admin
 onMounted(() => {
   const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
+  if (!userRole || userRole !== 'AdminSchools') { // Sửa từ 'admin' thành 'AdminSchools'
     // Redirect to login if not logged in as admin
     navigateTo('/login');
   }

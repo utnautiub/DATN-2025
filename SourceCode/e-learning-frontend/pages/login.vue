@@ -1,77 +1,67 @@
 <template>
-  <div class="min-h-screen flex mt-[-72px ] items-center justify-center">
+  <div class="min-h-screen flex mt-[-72px] items-center justify-center">
     <Card class="p-8 sm:rounded-lg sm:shadow-md sm:border-solid border-none bg-card-none shadow-none w-full max-w-md">
       <div class="text-center mb-8">
         <h1 class="text-2xl font-bold text-primary">E-Learning</h1>
         <p class="mt-2">{{ t('login.title') }}</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-6">
+      <!-- Bước 1: Nhập username và password -->
+      <form v-if="!requiresSchoolSelection" @submit.prevent="handleInitialLogin" class="space-y-6">
         <div>
-          <Label for="email" class="block text-sm font-medium mb-1">{{ t('common.email') }}</Label>
-          <input id="email" v-model="email" type="email" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary"
-            placeholder="email@example.com" />
+          <Label for="username" class="block text-sm font-medium mb-1">{{ t('common.username') }}</Label>
+          <input id="username" v-model="username" type="text" required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary" placeholder="Username" />
         </div>
-
         <div>
-          <label for="password" class="block text-sm font-medium mb-1">{{ t('common.password') }}</label>
+          <Label for="password" class="block text-sm font-medium mb-1">{{ t('common.password') }}</Label>
           <input id="password" v-model="password" type="password" required
             class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary" placeholder="••••••••" />
         </div>
-
-
-
         <div class="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Checkbox id="remember-me" />
-            <label htmlFor="remember-me"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              {{ t('common.rememberMe') }}
-            </label>
+          <div class="flex items-center space-x-2">
+            <Checkbox id="remember-me" v-model="rememberMe" />
+            <Label for="remember-me">{{ t('common.rememberMe') }}</Label>
           </div>
-
           <div class="text-sm">
-            <a href="#" class="">{{ t('common.forgotPassword') }}</a>
+            <NuxtLink to="/forgot-password" class="text-primary hover:underline">{{ t('common.forgotPassword') }}
+            </NuxtLink>
           </div>
         </div>
-
         <div v-if="error" class="text-red-500 text-sm text-center">
           {{ error }}
         </div>
-
         <div>
-          <button type="submit"
-            class="w-full py-2 px-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition"
-            :disabled="loading">
+          <Button type="submit" class="w-full" :disabled="loading">
             <span v-if="loading">Đang {{ t('common.login').toLowerCase() }}...</span>
             <span v-else>{{ t('common.login') }}</span>
-          </button>
+          </Button>
         </div>
       </form>
 
-      <div class="mt-8 border-t pt-6">
-        <p class="text-sm text-center mb-4">{{ t('login.quickLogin') }}</p>
-        <div class="grid grid-cols-3 gap-3">
-          <button @click="quickLogin('admin@example.com', 'password123')"
-            class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
-            <span>{{ t('login.admin') }}</span>
-          </button>
-          <button @click="quickLogin('teacher@example.com', 'password123')"
-            class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
-            <span>{{ t('login.teacher') }}</span>
-          </button>
-          <button @click="quickLogin('student@example.com', 'password123')"
-            class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50">
-            <span>{{ t('login.student') }}</span>
-          </button>
+      <!-- Bước 2: Chọn trường nếu trùng username -->
+      <form v-else @submit.prevent="handleFinalLogin" class="space-y-6">
+        <div>
+          <Label for="school_id" class="block text-sm font-medium mb-1">Trường học</Label>
+          <select id="school_id" v-model="school_id" required class="w-full px-4 py-2 border rounded-lg">
+            <option v-for="school in schools" :key="school.id" :value="school.id">{{ school.name }}</option>
+          </select>
         </div>
-      </div>
+        <div v-if="error" class="text-red-500 text-sm text-center">
+          {{ error }}
+        </div>
+        <div>
+          <Button type="submit" class="w-full" :disabled="loading">
+            <span v-if="loading">Đang {{ t('common.login').toLowerCase() }}...</span>
+            <span v-else>Tiếp tục</span>
+          </Button>
+        </div>
+      </form>
 
       <div class="mt-6 text-center">
-        <NuxtLink :to="localePath('/')" class="">
-          <Button>
-            <Label class="text-white">{{ t('common.backToHome') }}</Label>
+        <NuxtLink :to="localePath('/')" class="text-primary hover:underline">
+          <Button variant="outline">
+            <Label>{{ t('common.backToHome') }}</Label>
           </Button>
         </NuxtLink>
       </div>
@@ -81,51 +71,123 @@
 
 <script lang="ts" setup>
 import { useLanguage } from '~/composables/useLanguage';
-import { useTheme } from '~/composables/useTheme';
 import { useLocalePath } from '#i18n';
+import type { AxiosResponse } from 'axios';
 
 const router = useRouter();
 const { t } = useLanguage();
-const { isDark } = useTheme();
 const localePath = useLocalePath();
+const { $axios } = useNuxtApp();
 
-const email = ref('');
-const password = ref('');
-const loading = ref(false);
-const error = ref('');
+interface School {
+  id: number;
+  name: string;
+}
 
-const quickLogin = (userEmail: string, userPassword: string) => {
-  email.value = userEmail;
-  password.value = userPassword;
-  handleLogin();
-};
+interface User {
+  id: number;
+  username: string;
+  role: string;
+  school_id: number | null;
+}
 
-const handleLogin = async () => {
+interface InitialLoginResponse {
+  schools?: School[];
+  requires_school_selection?: boolean;
+  user?: User;
+  token?: string;
+}
+
+const username = ref<string>('');
+const password = ref<string>('');
+const rememberMe = ref<boolean>(false);
+const loading = ref<boolean>(false);
+const error = ref<string>('');
+const requiresSchoolSelection = ref<boolean>(false);
+const schools = ref<School[]>([]);
+const school_id = ref<string>('');
+
+const handleInitialLogin = async () => {
   try {
     loading.value = true;
     error.value = '';
 
-    let role = null;
+    const response: AxiosResponse<InitialLoginResponse> = await $axios.post('/login', {
+      username: username.value,
+      password: password.value,
+    });
 
-    if (email.value === 'admin@example.com' && password.value === 'password123') {
-      role = 'admin';
-    } else if (email.value === 'teacher@example.com' && password.value === 'password123') {
-      role = 'teacher';
-    } else if (email.value === 'student@example.com' && password.value === 'password123') {
-      role = 'student';
-    }
-
-    if (role) {
-      localStorage.setItem('user_role', role);
-      localStorage.setItem('user_email', email.value);
-
-      router.push(`/${role}/dashboard`);
+    if (response.data.requires_school_selection) {
+      // Nếu trùng username, hiển thị dropdown chọn trường
+      schools.value = response.data.schools || [];
+      requiresSchoolSelection.value = true;
     } else {
-      error.value = t('login.invalidCredentials');
+      // Nếu không trùng username, đăng nhập thành công hoặc báo lỗi
+      const { user, token } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user_role', user.role);
+      localStorage.setItem('school_id', String(user.school_id));
+
+      switch (user.role) {
+        case 'SuperAdmin':
+          router.push('/super-admin/dashboard');
+          break;
+        case 'AdminSchools':
+          router.push('/admin/dashboard');
+          break;
+        case 'Teacher':
+          router.push('/teacher/dashboard');
+          break;
+        case 'Student':
+          router.push('/student/dashboard');
+          break;
+        default:
+          error.value = t('login.invalidRole');
+      }
     }
-  } catch (err) {
-    console.error('Login error:', err);
-    error.value = t('login.error');
+  } catch (err: any) {
+    console.error('Initial login error:', err);
+    error.value = err.response?.data?.error || t('login.invalidCredentials');
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleFinalLogin = async () => {
+  try {
+    loading.value = true;
+    error.value = '';
+
+    const response: AxiosResponse<InitialLoginResponse> = await $axios.post('/login', {
+      username: username.value,
+      password: password.value,
+      school_id: school_id.value,
+    });
+
+    const { user, token } = response.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('user_role', user.role);
+    localStorage.setItem('school_id', String(user.school_id));
+
+    switch (user.role) {
+      case 'SuperAdmin':
+        router.push('/super-admin/dashboard');
+        break;
+      case 'AdminSchools':
+        router.push('/admin/dashboard');
+        break;
+      case 'Teacher':
+        router.push('/teacher/dashboard');
+        break;
+      case 'Student':
+        router.push('/student/dashboard');
+        break;
+      default:
+        error.value = t('login.invalidRole');
+    }
+  } catch (err: any) {
+    console.error('Final login error:', err);
+    error.value = err.response?.data?.error || t('login.invalidCredentials');
   } finally {
     loading.value = false;
   }

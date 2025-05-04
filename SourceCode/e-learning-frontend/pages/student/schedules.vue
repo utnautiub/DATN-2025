@@ -12,7 +12,6 @@
             <TableHead>Thời gian</TableHead>
             <TableHead>Phòng học</TableHead>
             <TableHead>Link Google Meet</TableHead>
-            <TableHead>Hành động</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -24,10 +23,6 @@
             <TableCell>
               <a v-if="schedule.meet_link" :href="schedule.meet_link" target="_blank">Tham gia</a>
               <span v-else>Chưa tạo link</span>
-            </TableCell>
-            <TableCell>
-              <Button v-if="schedule.course?.mode === 'Trực tuyến' && !schedule.meet_link"
-                @click="createMeetLink(schedule.id)">Tạo link Google Meet</Button>
             </TableCell>
           </TableRow>
         </TableBody>
@@ -43,7 +38,6 @@ import type { AxiosResponse } from 'axios';
 interface Course {
   id: number;
   name: string;
-  mode: string;
 }
 
 interface Room {
@@ -76,19 +70,10 @@ const fetchSchedules = async () => {
   }
 };
 
-const createMeetLink = async (scheduleId: number) => {
-  try {
-    await $axios.post(`/schedules/${scheduleId}/create_meet_link`);
-    await fetchSchedules();
-  } catch (error) {
-    console.error('Error creating Google Meet link:', error);
-  }
-};
-
 onMounted(fetchSchedules);
 
 definePageMeta({
-  layout: 'teacher',
+  layout: 'student',
 });
 </script>
 

@@ -57,7 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue';
+import { navigateTo } from '#app';
 
 definePageMeta({
   layout: 'teacher',
@@ -66,41 +67,42 @@ definePageMeta({
 // Check if user is logged in and is teacher
 onMounted(() => {
   const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'teacher') {
+  if (!userRole || userRole !== 'Teacher') { // Sửa từ 'teacher' thành 'Teacher'
     // Redirect to login if not logged in as teacher
-    navigateTo('/teacher/login');
+    navigateTo('/login'); // Sửa đường dẫn chuyển hướng thành '/login'
   }
 });
 
 const stats = ref({
   class_count: 0,
   student_count: 0,
-  pending_assignments: 0
-})
-const upcomingSchedules = ref([])
+  pending_assignments: 0,
+});
+
+const upcomingSchedules = ref([]);
 
 const fetchStats = async () => {
   try {
-    const response = await $fetch('/api/teacher/stats')
-    stats.value = response
+    const response = await $fetch('/api/teacher/stats');
+    stats.value = response;
   } catch (error) {
-    console.error('Error fetching stats:', error)
-    useToast().error('Lỗi khi tải thống kê.')
+    console.error('Error fetching stats:', error);
+    useToast().error('Lỗi khi tải thống kê.');
   }
-}
+};
 
 const fetchUpcomingSchedules = async () => {
   try {
-    const response = await $fetch('/api/teacher/schedules/upcoming')
-    upcomingSchedules.value = response
+    const response = await $fetch('/api/teacher/schedules/upcoming');
+    upcomingSchedules.value = response;
   } catch (error) {
-    console.error('Error fetching schedules:', error)
-    useToast().error('Lỗi khi tải lịch giảng dạy.')
+    console.error('Error fetching schedules:', error);
+    useToast().error('Lỗi khi tải lịch giảng dạy.');
   }
-}
+};
 
-fetchStats()
-fetchUpcomingSchedules()
+fetchStats();
+fetchUpcomingSchedules();
 </script>
 
 <style scoped>

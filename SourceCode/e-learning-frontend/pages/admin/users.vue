@@ -1,171 +1,139 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Quản lý người dùng</h1>
-      <Button @click="openCreateDialog">
-        <Icon icon="heroicons:plus" class="mr-2 h-5 w-5" />
-        Thêm người dùng
-      </Button>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold mb-6">Quản lý người dùng</h1>
 
-    <!-- Table -->
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Họ tên</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Vai trò</TableHead>
-          <TableHead>Hành động</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="user in users" :key="user.id">
-          <TableCell>{{ user.full_name }}</TableCell>
-          <TableCell>{{ user.email }}</TableCell>
-          <TableCell>{{ user.role }}</TableCell>
-          <TableCell>
-            <Button variant="outline" size="sm" @click="openEditDialog(user)" class="mr-2">
-              <Icon icon="heroicons:pencil" class="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" size="sm" @click="deleteUser(user.id)">
-              <Icon icon="heroicons:trash" class="h-4 w-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
-    <!-- Create/Edit Dialog -->
-    <Dialog v-model:open="dialogOpen">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{{ isEditing ? 'Chỉnh sửa người dùng' : 'Thêm người dùng' }}</DialogTitle>
-        </DialogHeader>
-        <div class="space-y-4">
-          <div>
-            <Label>Họ tên</Label>
-            <Input v-model="form.full_name" />
-          </div>
-          <div>
-            <Label>Email</Label>
-            <Input v-model="form.email" type="email" />
-          </div>
-          <div>
-            <Label>Vai trò</Label>
-            <Select v-model="form.role">
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn vai trò" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Student">Học sinh</SelectItem>
-                <SelectItem value="Teacher">Giáo viên</SelectItem>
-                <SelectItem value="Admin">Quản trị viên</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div v-if="!isEditing">
-            <Label>Mật khẩu</Label>
-            <Input v-model="form.password" type="password" />
-          </div>
+    <!-- Form to create a new user -->
+    <Card class="p-6 mb-6">
+      <form @submit.prevent="createUser" class="space-y-4">
+        <div>
+          <Label for="username">Tên đăng nhập</Label>
+          <Input id="username" v-model="newUser.username" required />
         </div>
-        <DialogFooter>
-          <Button variant="outline" @click="dialogOpen = false">Hủy</Button>
-          <Button @click="saveUser">{{ isEditing ? 'Cập nhật' : 'Thêm' }}</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div>
+          <Label for="password">Mật khẩu</Label>
+          <Input id="password" v-model="newUser.password" type="password" required />
+        </div>
+        <div>
+          <Label for="role">Vai trò</Label>
+          <select id="role" v-model="newUser.role" required class="w-full px-4 py-2 border rounded-lg">
+            <option value="Teacher">Teacher</option>
+            <option value="Student">Student</option>
+          </select>
+        </div>
+        <div v-if="error" class="text-red-500 text-sm">
+          {{ error }}
+        </div>
+        <Button type="submit" :disabled="loading">Tạo tài khoản</Button>
+      </form>
+    </Card>
+
+    <!-- Users List -->
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Tên đăng nhập</TableHead>
+            <TableHead>Vai trò</TableHead>
+            <TableHead>Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="user in users" :key="user.id">
+            <TableCell>{{ user.username }}</TableCell>
+            <TableCell>{{ user.role }}</TableCell>
+            <TableCell>
+              <Button variant="outline" @click="editUser(user)">Sửa</Button>
+              <Button v-if="canDeleteUser(user)" variant="destructive" @click="deleteUser(user.id)">Xóa</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
   </div>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, reactive } from 'vue'
-import { useLanguage } from '~/composables/useLanguage';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import type { AxiosResponse } from 'axios';
 
-// Set the layout for this page
-definePageMeta({
-  layout: 'admin',
-});
+interface User {
+  id: number;
+  username: string;
+  role: string;
+  school_id: number;
+}
 
-// Get translations
-const { t } = useLanguage();
+const { $axios } = useNuxtApp();
 
-// Check if user is logged in and is admin
-onMounted(() => {
-  const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
-    // Redirect to login if not logged in as admin
-    navigateTo('/login');
-  }
-});
+const users = ref<User[]>([]);
+const newUser = ref<{ username: string; password: string; role: string }>({ username: '', password: '', role: '' });
+const loading = ref<boolean>(false);
+const error = ref<string>('');
 
-const users = ref([])
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const form = reactive({
-  id: null,
-  full_name: '',
-  email: '',
-  role: '',
-  password: ''
-})
+const currentUserRole = ref<string | null>(localStorage.getItem('user_role'));
 
 const fetchUsers = async () => {
   try {
-    const response = await $fetch('/api/users')
-    users.value = response
+    const response: AxiosResponse<User[]> = await $axios.get('/users');
+    users.value = response.data;
   } catch (error) {
-    console.error('Error fetching users:', error)
+    console.error('Error fetching users:', error);
   }
-}
+};
 
-const openCreateDialog = () => {
-  isEditing.value = false
-  form.id = null
-  form.full_name = ''
-  form.email = ''
-  form.role = ''
-  form.password = ''
-  dialogOpen.value = true
-}
-
-const openEditDialog = (user: any) => {
-  isEditing.value = true
-  form.id = user.id
-  form.full_name = user.full_name
-  form.email = user.email
-  form.role = user.role
-  dialogOpen.value = true
-}
-
-const saveUser = async () => {
+const createUser = async () => {
   try {
-    if (isEditing.value) {
-      await $fetch(`/api/users/${form.id}`, {
-        method: 'PUT',
-        body: { full_name: form.full_name, email: form.email, role: form.role }
-      })
+    loading.value = true;
+    error.value = '';
+    await $axios.post('/users', newUser.value);
+    newUser.value = { username: '', password: '', role: '' };
+    await fetchUsers();
+  } catch (error: any) {
+    console.error('Error creating user:', error);
+    if (error.response?.data?.errors) {
+      error.value = error.response.data.errors.join(', ');
     } else {
-      await $fetch('/api/users', {
-        method: 'POST',
-        body: form
-      })
+      error.value = 'Không thể tạo tài khoản. Vui lòng thử lại.';
     }
-    dialogOpen.value = false
-    fetchUsers()
-  } catch (error) {
-    console.error('Error saving user:', error)
+  } finally {
+    loading.value = false;
   }
-}
+};
+
+const editUser = (user: User) => {
+  // Placeholder for edit functionality
+  console.log('Editing user:', user);
+};
+
+const canDeleteUser = (user: User) => {
+  if (currentUserRole.value === 'SuperAdmin') {
+    return true;
+  }
+  if (currentUserRole.value === 'AdminSchools' && user.role === 'AdminSchools') {
+    return false;
+  }
+  return true;
+};
 
 const deleteUser = async (id: number) => {
   try {
-    await $fetch(`/api/users/${id}`, { method: 'DELETE' })
-    fetchUsers()
-  } catch (error) {
-    console.error('Error deleting user:', error)
+    await $axios.delete(`/users/${id}`);
+    await fetchUsers();
+  } catch (error: any) {
+    console.error('Error deleting user:', error);
+    if (error.response?.data?.error) {
+      error.value = error.response.data.error;
+    } else {
+      error.value = 'Không thể xóa tài khoản. Vui lòng thử lại.';
+    }
   }
-}
+};
 
-fetchUsers()
+onMounted(fetchUsers);
+
+definePageMeta({
+  layout: 'admin',
+});
 </script>
+
+<style scoped></style>

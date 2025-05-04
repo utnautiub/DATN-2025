@@ -14,8 +14,19 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users
-      resources :courses
+      post '/login', to: 'sessions#create'
+      resources :schools, only: [:index, :create, :update, :destroy]
+      post '/schools/:school_id/admin_accounts', to: 'users#create_admin_account'
+      resources :users, only: [:index, :create, :update, :destroy]
+      resources :classes, only: [:index, :create, :update, :destroy]
+      resources :courses, only: [:index, :create, :update, :destroy]
+      resources :schedules, only: [:index, :create, :update, :destroy] do
+        member do
+          post 'create_meet_link'
+        end
+      end
+      resources :subject_assignments, only: [:index, :create, :update, :destroy]
+      resources :enrollments, only: [:index, :create, :destroy]
     end
   end
 

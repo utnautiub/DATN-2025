@@ -57,74 +57,74 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { navigateTo } from '#app'
+import { ref, onMounted } from 'vue';
+import { navigateTo } from '#app';
 
 definePageMeta({
   layout: 'student',
-})
+});
 
 onMounted(() => {
-  const userRole = localStorage.getItem('user_role')
-  if (!userRole || userRole !== 'student') {
-    navigateTo('/student/login')
+  const userRole = localStorage.getItem('user_role');
+  if (!userRole || userRole !== 'Student') { // Sửa từ 'student' thành 'Student'
+    navigateTo('/login'); // Sửa đường dẫn chuyển hướng thành '/login'
   } else {
-    fetchStats()
-    fetchUpcomingSchedules()
+    fetchStats();
+    fetchUpcomingSchedules();
   }
-})
+});
 
 const stats = ref({
   course_count: 0,
   pending_assignments: 0,
-  new_notifications: 0
-})
+  new_notifications: 0,
+});
 
-const upcomingSchedules = ref([])
+const upcomingSchedules = ref([]);
 
 // Dữ liệu mẫu
 const demoStats = {
   course_count: 3,
   pending_assignments: 2,
-  new_notifications: 5
-}
+  new_notifications: 5,
+};
 
 const demoUpcomingSchedules = [
   {
     id: 1,
     subject_name: "Toán",
     start_time: "2025-04-21T08:00:00Z",
-    classroom_name: "Phòng 101"
+    classroom_name: "Phòng 101",
   },
   {
     id: 2,
     subject_name: "Văn",
     start_time: "2025-04-21T10:00:00Z",
-    classroom_name: "Phòng 102"
-  }
-]
+    classroom_name: "Phòng 102",
+  },
+];
 
 const fetchStats = async () => {
   try {
-    stats.value = demoStats
+    stats.value = demoStats;
     // Uncomment để gọi API thực tế
-    // const response = await $fetch('/api/student/stats')
-    // stats.value = response
+    // const response = await $fetch('/api/student/stats');
+    // stats.value = response;
   } catch (error) {
-    console.error('Error fetching stats:', error)
+    console.error('Error fetching stats:', error);
   }
-}
+};
 
 const fetchUpcomingSchedules = async () => {
   try {
-    upcomingSchedules.value = demoUpcomingSchedules
+    upcomingSchedules.value = demoUpcomingSchedules;
     // Uncomment để gọi API thực tế
-    // const response = await $fetch('/api/student/schedules/upcoming')
-    // upcomingSchedules.value = response
+    // const response = await $fetch('/api/student/schedules/upcoming');
+    // upcomingSchedules.value = response;
   } catch (error) {
-    console.error('Error fetching schedules:', error)
+    console.error('Error fetching schedules:', error);
   }
-}
+};
 </script>
 
 <style scoped>

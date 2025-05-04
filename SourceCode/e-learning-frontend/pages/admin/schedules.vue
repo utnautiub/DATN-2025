@@ -1,203 +1,185 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Quản lý lịch học</h1>
-      <Button @click="openCreateDialog">
-        <Icon icon="heroicons:plus" class="mr-2 h-5 w-5" />
-        Thêm lịch học
-      </Button>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold mb-6">Quản lý lịch học</h1>
 
-    <!-- Table -->
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Lớp học</TableHead>
-          <TableHead>Thời gian</TableHead>
-          <TableHead>Phòng học</TableHead>
-          <TableHead>Hành động</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="schedule in schedules" :key="schedule.id">
-          <TableCell>{{ schedule.class_name }}</TableCell>
-          <TableCell>{{ schedule.start_time }} - {{ schedule.end_time }}</TableCell>
-          <TableCell>{{ schedule.classroom_name }}</TableCell>
-          <TableCell>
-            <Button variant="outline" size="sm" @click="openEditDialog(schedule)" class="mr-2">
-              <Icon icon="heroicons:pencil" class="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" size="sm" @click="deleteSchedule(schedule.id)">
-              <Icon icon="heroicons:trash" class="h-4 w-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
-    <!-- Create/Edit Dialog -->
-    <Dialog v-model:open="dialogOpen">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{{ isEditing ? 'Chỉnh sửa lịch học' : 'Thêm lịch học' }}</DialogTitle>
-        </DialogHeader>
-        <div class="space-y-4">
-          <div>
-            <Label>Lớp học</Label>
-            <Select v-model="form.class_id">
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn lớp học" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem v-for="classItem in classes" :key="classItem.id" :value="classItem.id">
-                  {{ classItem.name }}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label>Thời gian bắt đầu</Label>
-            <Input v-model="form.start_time" type="datetime-local" />
-          </div>
-          <div>
-            <Label>Thời gian kết thúc</Label>
-            <Input v-model="form.end_time" type="datetime-local" />
-          </div>
-          <div>
-            <Label>Phòng học</Label>
-            <Select v-model="form.classroom_id">
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn phòng học" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem v-for="classroom in classrooms" :key="classroom.id" :value="classroom.id">
-                  {{ classroom.name }}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+    <!-- Form to create a new schedule -->
+    <Card class="p-6 mb-6">
+      <form @submit.prevent="createSchedule" class="space-y-4">
+        <div>
+          <Label for="course_id">Lớp học phần</Label>
+          <select id="course_id" v-model="newSchedule.course_id" required class="w-full px-4 py-2 border rounded-lg">
+            <option v-for="course in courses" :key="course.id" :value="course.id">{{ course.name }}</option>
+          </select>
         </div>
-        <DialogFooter>
-          <Button variant="outline" @click="dialogOpen = false">Hủy</Button>
-          <Button @click="saveSchedule">{{ isEditing ? 'Cập nhật' : 'Thêm' }}</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div>
+          <Label for="day_of_week">Ngày trong tuần</Label>
+          <Input id="day_of_week" v-model="newSchedule.day_of_week" required />
+        </div>
+        <div>
+          <Label for="start_time">Thời gian bắt đầu</Label>
+          <Input id="start_time" v-model="newSchedule.start_time" type="time" required />
+        </div>
+        <div>
+          <Label for="end_time">Thời gian kết thúc</Label>
+          <Input id="end_time" v-model="newSchedule.end_time" type="time" required />
+        </div>
+        <div>
+          <Label for="room_id">Phòng học</Label>
+          <select id="room_id" v-model="newSchedule.room_id" class="w-full px-4 py-2 border rounded-lg">
+            <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
+          </select>
+        </div>
+        <Button type="submit" :disabled="loading">Thêm lịch học</Button>
+      </form>
+    </Card>
+
+    <!-- Schedules List -->
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Lớp học phần</TableHead>
+            <TableHead>Ngày</TableHead>
+            <TableHead>Thời gian</TableHead>
+            <TableHead>Phòng học</TableHead>
+            <TableHead>Link Google Meet</TableHead>
+            <TableHead>Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="schedule in schedules" :key="schedule.id">
+            <TableCell>{{ schedule.course?.name }}</TableCell>
+            <TableCell>{{ schedule.day_of_week }}</TableCell>
+            <TableCell>{{ schedule.start_time }} - {{ schedule.end_time }}</TableCell>
+            <TableCell>{{ schedule.room?.name }}</TableCell>
+            <TableCell>
+              <a v-if="schedule.meet_link" :href="schedule.meet_link" target="_blank">Tham gia</a>
+              <span v-else>Chưa tạo link</span>
+            </TableCell>
+            <TableCell>
+              <Button variant="outline" @click="editSchedule(schedule)">Sửa</Button>
+              <Button variant="destructive" @click="deleteSchedule(schedule.id)">Xóa</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
   </div>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, reactive } from 'vue'
-import { useLanguage } from '~/composables/useLanguage';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import type { AxiosResponse } from 'axios';
 
-// Set the layout for this page
-definePageMeta({
-  layout: 'admin',
-});
+interface Course {
+  id: number;
+  name: string;
+}
 
-// Get translations
-const { t } = useLanguage();
+interface Room {
+  id: number;
+  name: string;
+}
 
-// Check if user is logged in and is admin
-onMounted(() => {
-  const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
-    // Redirect to login if not logged in as admin
-    navigateTo('/login');
-  }
-});
+interface Schedule {
+  id: number;
+  course_id: number;
+  class_id: number | null;
+  day_of_week: string;
+  start_time: string;
+  end_time: string;
+  room_id: number | null;
+  meet_link: string | null;
+  status: string;
+  course?: Course;
+  room?: Room;
+}
 
-const schedules = ref([])
-const classes = ref([])
-const classrooms = ref([])
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const form = reactive({
-  id: null,
-  class_id: null,
+const { $axios } = useNuxtApp();
+
+const schedules = ref<Schedule[]>([]);
+const courses = ref<Course[]>([]);
+const rooms = ref<Room[]>([]);
+const newSchedule = ref<{
+  course_id: string;
+  class_id: string;
+  day_of_week: string;
+  start_time: string;
+  end_time: string;
+  room_id: string;
+}>({
+  course_id: '',
+  class_id: '',
+  day_of_week: '',
   start_time: '',
   end_time: '',
-  classroom_id: null
-})
+  room_id: '',
+});
+const loading = ref<boolean>(false);
 
 const fetchSchedules = async () => {
   try {
-    const response = await $fetch('/api/schedules')
-    schedules.value = response
+    const response: AxiosResponse<Schedule[]> = await $axios.get('/schedules');
+    schedules.value = response.data;
   } catch (error) {
-    console.error('Error fetching schedules:', error)
+    console.error('Error fetching schedules:', error);
   }
-}
+};
 
-const fetchClasses = async () => {
+const fetchCourses = async () => {
   try {
-    const response = await $fetch('/api/classes')
-    classes.value = response
+    const response: AxiosResponse<Course[]> = await $axios.get('/courses');
+    courses.value = response.data;
   } catch (error) {
-    console.error('Error fetching classes:', error)
+    console.error('Error fetching courses:', error);
   }
-}
+};
 
-const fetchClassrooms = async () => {
+const fetchRooms = async () => {
   try {
-    const response = await $fetch('/api/classrooms')
-    classrooms.value = response
+    const response: AxiosResponse<Room[]> = await $axios.get('/rooms');
+    rooms.value = response.data;
   } catch (error) {
-    console.error('Error fetching classrooms:', error)
+    console.error('Error fetching rooms:', error);
   }
-}
+};
 
-const openCreateDialog = () => {
-  isEditing.value = false
-  form.id = null
-  form.class_id = null
-  form.start_time = ''
-  form.end_time = ''
-  form.classroom_id = null
-  dialogOpen.value = true
-}
-
-const openEditDialog = (schedule: any) => {
-  isEditing.value = true
-  form.id = schedule.id
-  form.class_id = schedule.class_id
-  form.start_time = schedule.start_time
-  form.end_time = schedule.end_time
-  form.classroom_id = schedule.classroom_id
-  dialogOpen.value = true
-}
-
-const saveSchedule = async () => {
+const createSchedule = async () => {
   try {
-    if (isEditing.value) {
-      await $fetch(`/api/schedules/${form.id}`, {
-        method: 'PUT',
-        body: { class_id: form.class_id, start_time: form.start_time, end_time: form.end_time, classroom_id: form.classroom_id }
-      })
-    } else {
-      await $fetch('/api/schedules', {
-        method: 'POST',
-        body: form
-      })
-    }
-    dialogOpen.value = false
-    fetchSchedules()
+    loading.value = true;
+    await $axios.post('/schedules', newSchedule.value);
+    newSchedule.value = { course_id: '', class_id: '', day_of_week: '', start_time: '', end_time: '', room_id: '' };
+    await fetchSchedules();
   } catch (error) {
-    console.error('Error saving schedule:', error)
+    console.error('Error creating schedule:', error);
+  } finally {
+    loading.value = false;
   }
-}
+};
+
+const editSchedule = (schedule: Schedule) => {
+  // Placeholder for edit functionality
+  console.log('Editing schedule:', schedule);
+};
 
 const deleteSchedule = async (id: number) => {
   try {
-    await $fetch(`/api/schedules/${id}`, { method: 'DELETE' })
-    fetchSchedules()
+    await $axios.delete(`/schedules/${id}`);
+    await fetchSchedules();
   } catch (error) {
-    console.error('Error deleting schedule:', error)
+    console.error('Error deleting schedule:', error);
   }
-}
+};
 
-fetchSchedules()
-fetchClasses()
-fetchClassrooms()
+onMounted(() => {
+  fetchSchedules();
+  fetchCourses();
+  fetchRooms();
+});
+
+definePageMeta({
+  layout: 'admin',
+});
 </script>
+
+<style scoped></style>
