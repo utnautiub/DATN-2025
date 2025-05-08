@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_04_185049) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_05_150956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -171,8 +171,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_185049) do
     t.datetime "deleted_at", precision: nil
   end
 
+  create_table "equipment_items", force: :cascade do |t|
+    t.bigint "room_equipment_id", null: false
+    t.string "code", null: false
+    t.string "status", default: "Active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_equipment_items_on_code", unique: true
+    t.index ["room_equipment_id"], name: "index_equipment_items_on_room_equipment_id"
+  end
+
   create_table "equipment_reports", force: :cascade do |t|
-    t.bigint "equipment_id"
+    t.bigint "equipment_item_id"
     t.bigint "user_id"
     t.text "description"
     t.string "status"
@@ -301,7 +311,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_04_185049) do
   create_table "room_equipments", force: :cascade do |t|
     t.bigint "room_id"
     t.string "name"
-    t.string "status"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil

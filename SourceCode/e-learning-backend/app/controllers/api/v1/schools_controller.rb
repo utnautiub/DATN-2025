@@ -1,12 +1,18 @@
+# app/controllers/api/v1/schools_controller.rb
 module Api
   module V1
     class SchoolsController < ApplicationController
       before_action :authenticate_user
-      before_action :require_super_admin
+      before_action :require_super_admin, except: [:show] # Chỉ SuperAdmin có quyền tạo, sửa, xóa
 
       def index
         schools = School.all
         render json: schools
+      end
+
+      def show
+        school = School.find(params[:id])
+        render json: school
       end
 
       def create
@@ -14,7 +20,7 @@ module Api
         if school.save
           render json: school, status: :created
         else
-          render json: school.errors, status: :unprocessable_entity
+          render json: { errors: school.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -23,7 +29,7 @@ module Api
         if school.update(school_params)
           render json: school
         else
-          render json: school.errors, status: :unprocessable_entity
+          render json: { errors: school.errors.full_messages }, status: :unprocessable_entity
         end
       end
 

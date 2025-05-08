@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post '/login', to: 'sessions#create'
-      resources :schools, only: [:index, :create, :update, :destroy]
+      resources :schools, only: [:index, :show, :create, :update, :destroy]
       post '/schools/:school_id/admin_accounts', to: 'users#create_admin_account'
       resources :users, only: [:index, :create, :update, :destroy]
       resources :classes, only: [:index, :create, :update, :destroy]
@@ -27,6 +27,25 @@ Rails.application.routes.draw do
       end
       resources :subject_assignments, only: [:index, :create, :update, :destroy]
       resources :enrollments, only: [:index, :create, :destroy]
+      
+      # Cụm 1: Buildings, Rooms, Equipment, Equipment Reports
+      resources :buildings, only: [:index, :create, :update, :destroy]
+      resources :rooms, only: [:index, :create, :update, :destroy]
+      resources :room_equipments, only: [:index, :create, :update, :destroy]
+      resources :equipment_items, only: [:destroy]
+      resources :equipment_reports, only: [:index, :create, :update, :destroy]
+
+      # Cụm 2: Departments, Majors, Training Programs, Training Program Subjects, Subjects
+      resources :departments, only: [:index, :create, :update, :destroy]
+      resources :majors, only: [:index, :create, :update, :destroy]
+      resources :training_programs, only: [:index, :create, :update, :destroy]
+      resources :training_program_subjects, only: [:index, :create, :destroy]
+      resources :subjects, only: [:index, :create, :update, :destroy]
+
+      # Cụm 3: Additional Routes
+      resources :user_groups, only: [:index, :create, :update, :destroy]
+      resources :subjects, only: [:index, :create, :update, :destroy]
+      resources :teachers, only: [:index]
     end
   end
 

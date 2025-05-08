@@ -1,176 +1,132 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Quản lý nhóm người dùng</h1>
-      <Button @click="openCreateDialog">
-        <Icon icon="heroicons:plus" class="mr-2 h-5 w-5" />
-        Thêm nhóm
-      </Button>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold mb-6">Quản lý nhóm người dùng</h1>
 
-    <!-- Table -->
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Tên nhóm</TableHead>
-          <TableHead>Mô tả</TableHead>
-          <TableHead>Số thành viên</TableHead>
-          <TableHead>Hành động</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="group in groups" :key="group.id">
-          <TableCell>{{ group.name }}</TableCell>
-          <TableCell>{{ group.description }}</TableCell>
-          <TableCell>{{ group.member_count }}</TableCell>
-          <TableCell>
-            <Button variant="outline" size="sm" @click="openEditDialog(group)" class="mr-2">
-              <Icon icon="heroicons:pencil" class="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" size="sm" @click="deleteGroup(group.id)">
-              <Icon icon="heroicons:trash" class="h-4 w-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
-    <!-- Create/Edit Dialog -->
-    <Dialog v-model:open="dialogOpen">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{{ isEditing ? 'Chỉnh sửa nhóm' : 'Thêm nhóm' }}</DialogTitle>
-        </DialogHeader>
-        <div class="space-y-4">
-          <div>
-            <Label>Tên nhóm</Label>
-            <Input v-model="form.name" />
-          </div>
-          <div>
-            <Label>Mô tả</Label>
-            <Textarea v-model="form.description" />
-          </div>
-          <div>
-            <Label>Thành viên</Label>
-            <Select v-model="form.members" multiple>
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn thành viên" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem v-for="user in users" :key="user.id" :value="user.id">
-                  {{ user.full_name }}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+    <!-- Form to create a new user group -->
+    <Card class="p-6 mb-6">
+      <form @submit.prevent="createUserGroup" class="space-y-4">
+        <div>
+          <Label for="name">Tên nhóm</Label>
+          <Input id="name" v-model="newUserGroup.name" required />
         </div>
-        <DialogFooter>
-          <Button variant="outline" @click="dialogOpen = false">Hủy</Button>
-          <Button @click="saveGroup">{{ isEditing ? 'Cập nhật' : 'Thêm' }}</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div>
+          <Label for="description">Mô tả</Label>
+          <Input id="description" v-model="newUserGroup.description" />
+        </div>
+        <div>
+          <Label for="users">Người dùng</Label>
+          <select id="users" v-model="newUserGroup.user_ids" multiple class="w-full px-4 py-2 border rounded-lg">
+            <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}</option>
+          </select>
+        </div>
+        <Button type="submit" :disabled="loading">Tạo nhóm</Button>
+      </form>
+    </Card>
+
+    <!-- User Groups List -->
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Tên nhóm</TableHead>
+            <TableHead>Mô tả</TableHead>
+            <TableHead>Số thành viên</TableHead>
+            <TableHead>Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="group in userGroups" :key="group.id">
+            <TableCell>{{ group.name }}</TableCell>
+            <TableCell>{{ group.description }}</TableCell>
+            <TableCell>{{ group.users?.length || 0 }}</TableCell>
+            <TableCell>
+              <Button variant="outline" @click="editUserGroup(group)">Sửa</Button>
+              <Button variant="destructive" @click="deleteUserGroup(group.id)">Xóa</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
   </div>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, reactive } from 'vue'
-import { useLanguage } from '~/composables/useLanguage';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import type { AxiosResponse } from 'axios';
 
-// Set the layout for this page
-definePageMeta({
-  layout: 'admin',
-});
-
-// Get translations
-const { t } = useLanguage();
-
-// Check if user is logged in and is admin
-onMounted(() => {
-  const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
-    // Redirect to login if not logged in as admin
-    navigateTo('/login');
-  }
-});
-
-const groups = ref([])
-const users = ref([])
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const form = reactive({
-  id: null,
-  name: '',
-  description: '',
-  members: []
-})
-
-const fetchGroups = async () => {
-  try {
-    const response = await $fetch('/api/user-groups')
-    groups.value = response
-  } catch (error) {
-    console.error('Error fetching groups:', error)
-  }
+interface User {
+  id: number;
+  username: string;
 }
+
+interface UserGroup {
+  id: number;
+  name: string;
+  description: string;
+  user_ids: number[];
+  users?: User[];
+}
+
+const { $axios } = useNuxtApp();
+
+const users = ref<User[]>([]);
+const userGroups = ref<UserGroup[]>([]);
+const newUserGroup = ref<UserGroup>({ id: 0, name: '', description: '', user_ids: [] });
+const loading = ref<boolean>(false);
 
 const fetchUsers = async () => {
   try {
-    const response = await $fetch('/api/users')
-    users.value = response
+    const response: AxiosResponse<User[]> = await $axios.get('/users');
+    users.value = response.data;
   } catch (error) {
-    console.error('Error fetching users:', error)
+    console.error('Error fetching users:', error);
   }
-}
+};
 
-const openCreateDialog = () => {
-  isEditing.value = false
-  form.id = null
-  form.name = ''
-  form.description = ''
-  form.members = []
-  dialogOpen.value = true
-}
-
-const openEditDialog = (group: any) => {
-  isEditing.value = true
-  form.id = group.id
-  form.name = group.name
-  form.description = group.description
-  form.members = group.members
-  dialogOpen.value = true
-}
-
-const saveGroup = async () => {
+const fetchUserGroups = async () => {
   try {
-    if (isEditing.value) {
-      await $fetch(`/api/user-groups/${form.id}`, {
-        method: 'PUT',
-        body: { name: form.name, description: form.description, members: form.members }
-      })
-    } else {
-      await $fetch('/api/user-groups', {
-        method: 'POST',
-        body: form
-      })
-    }
-    dialogOpen.value = false
-    fetchGroups()
+    const response: AxiosResponse<UserGroup[]> = await $axios.get('/user_groups');
+    userGroups.value = response.data;
   } catch (error) {
-    console.error('Error saving group:', error)
+    console.error('Error fetching user groups:', error);
   }
-}
+};
 
-const deleteGroup = async (id: number) => {
+const createUserGroup = async () => {
   try {
-    await $fetch(`/api/user-groups/${id}`, { method: 'DELETE' })
-    fetchGroups()
+    loading.value = true;
+    await $axios.post('/user_groups', newUserGroup.value);
+    newUserGroup.value = { id: 0, name: '', description: '', user_ids: [] };
+    await fetchUserGroups();
   } catch (error) {
-    console.error('Error deleting group:', error)
+    console.error('Error creating user group:', error);
+  } finally {
+    loading.value = false;
   }
-}
+};
 
-fetchGroups()
-fetchUsers()
+const editUserGroup = (group: UserGroup) => {
+  // Placeholder for edit functionality
+  console.log('Editing user group:', group);
+};
+
+const deleteUserGroup = async (id: number) => {
+  try {
+    await $axios.delete(`/user_groups/${id}`);
+    await fetchUserGroups();
+  } catch (error) {
+    console.error('Error deleting user group:', error);
+  }
+};
+
+onMounted(() => {
+  fetchUsers();
+  fetchUserGroups();
+});
+
+definePageMeta({
+  layout: 'admin',
+});
 </script>
+
+<style scoped></style>

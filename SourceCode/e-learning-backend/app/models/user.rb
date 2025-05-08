@@ -3,8 +3,9 @@ class User < ApplicationRecord
   has_secure_password
 
   belongs_to :school, optional: true
-  has_many :teachers
-  has_many :students
+  # Thay đổi từ has_many thành has_one
+  has_one :teacher, dependent: :destroy
+  has_one :student, dependent: :destroy
   has_many :forum_posts
   has_many :forum_replies
   has_many :chat_groups, foreign_key: :created_by
@@ -13,7 +14,12 @@ class User < ApplicationRecord
   has_many :equipment_reports
 
   validates :username, presence: true
+  validates :password, presence: true
+  validates :role, presence: true
   validate :username_unique_within_school
+
+  accepts_nested_attributes_for :teacher, allow_destroy: true
+  accepts_nested_attributes_for :student, allow_destroy: true
 
   private
 

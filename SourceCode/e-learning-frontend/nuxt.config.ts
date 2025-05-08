@@ -1,20 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
   devServer: {
-    port: 4000
+    port: 4000,
   },
 
-  css: ['~/assets/css/no-flash.css', '~/assets/css/tailwind.css'],
+  css: [
+    '~/assets/css/no-flash.css',
+    '~/assets/css/tailwind.css',
+    'leaflet/dist/leaflet.css',
+  ],
 
   vite: {
     plugins: [
       tailwindcss(),
     ],
+    optimizeDeps: {
+      include: ['leaflet'],
+    },
   },
 
   modules: [
@@ -45,18 +52,18 @@ export default defineNuxtConfig({
     locales: [
       { code: 'vi', iso: 'vi-VN', file: 'vi.json', name: 'Tiếng Việt' },
       { code: 'en', iso: 'en-US', file: 'en.json', name: 'English' },
-      { code: 'lo', iso: 'lo-LA', file: 'lo.json', name: 'ພາສາລາວ' }
+      { code: 'lo', iso: 'lo-LA', file: 'lo.json', name: 'ພາສາລາວ' },
     ],
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      redirectOn: 'root'
+      redirectOn: 'root',
     },
-    strategy: 'prefix_except_default'
+    strategy: 'prefix_except_default',
   },
   build: {
-    transpile: ['@vue-leaflet/vue-leaflet']
+    transpile: ['@vue-leaflet/vue-leaflet'],
   },
-  ssr: true
-})
 
+  ssr: true,
+});

@@ -1,156 +1,194 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Quản lý chương trình đào tạo</h1>
-      <Button @click="openCreateDialog">
-        <Icon icon="heroicons:plus" class="mr-2 h-5 w-5" />
-        Thêm chương trình
-      </Button>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold mb-6">Quản lý chương trình đào tạo</h1>
 
-    <!-- Table -->
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Tên chương trình</TableHead>
-          <TableHead>Mô tả</TableHead>
-          <TableHead>Thời gian</TableHead>
-          <TableHead>Hành động</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="program in programs" :key="program.id">
-          <TableCell>{{ program.name }}</TableCell>
-          <TableCell>{{ program.description }}</TableCell>
-          <TableCell>{{ program.duration }} tháng</TableCell>
-          <TableCell>
-            <Button variant="outline" size="sm" @click="openEditDialog(program)" class="mr-2">
-              <Icon icon="heroicons:pencil" class="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" size="sm" @click="deleteProgram(program.id)">
-              <Icon icon="heroicons:trash" class="h-4 w-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <!-- Form to create a new training program -->
+    <Card class="p-6 mb-6">
+      <form @submit.prevent="createTrainingProgram" class="space-y-4">
+        <div>
+          <Label for="name">Tên chương trình</Label>
+          <Input id="name" v-model="newTrainingProgram.name" required />
+        </div>
+        <div>
+          <Label for="start_year">Năm bắt đầu</Label>
+          <Input id="start_year" type="number" v-model.number="newTrainingProgram.start_year" required />
+        </div>
+        <div>
+          <Label for="end_year">Năm kết thúc</Label>
+          <Input id="end_year" type="number" v-model.number="newTrainingProgram.end_year" required />
+        </div>
+        <div>
+          <Label for="major_id">Ngành</Label>
+          <select id="major_id" v-model="newTrainingProgram.major_id" required
+            class="w-full px-4 py-2 border rounded-lg">
+            <option value="0">Chọn ngành</option>
+            <option v-for="major in majors" :key="major.id" :value="major.id">
+              {{ major.name }}
+            </option>
+          </select>
+        </div>
+        <Button type="submit" :disabled="loading">Thêm chương trình</Button>
+      </form>
+    </Card>
 
-    <!-- Create/Edit Dialog -->
-    <Dialog v-model:open="dialogOpen">
+    <!-- Training Programs List -->
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Tên chương trình</TableHead>
+            <TableHead>Năm bắt đầu</TableHead>
+            <TableHead>Năm kết thúc</TableHead>
+            <TableHead>Ngành</TableHead>
+            <TableHead>Khoa</TableHead>
+            <TableHead>Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="program in trainingPrograms" :key="program.id">
+            <TableCell>{{ program.name }}</TableCell>
+            <TableCell>{{ program.start_year }}</TableCell>
+            <TableCell>{{ program.end_year }}</TableCell>
+            <TableCell>{{ program.major?.name || 'N/A' }}</TableCell>
+            <TableCell>{{ program.major?.department?.name || 'N/A' }}</TableCell>
+            <TableCell>
+              <Button variant="outline" @click="openEditTrainingProgramModal(program)">Sửa</Button>
+              <Button variant="destructive" @click="deleteTrainingProgram(program.id)">Xóa</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
+
+    <!-- Edit Training Program Modal -->
+    <Dialog v-model:open="showEditModal">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{{ isEditing ? 'Chỉnh sửa chương trình' : 'Thêm chương trình' }}</DialogTitle>
+          <DialogTitle>Sửa chương trình đào tạo</DialogTitle>
         </DialogHeader>
-        <div class="space-y-4">
+        <form @submit.prevent="updateTrainingProgram" class="space-y-4">
           <div>
-            <Label>Tên chương trình</Label>
-            <Input v-model="form.name" />
+            <Label for="edit-name">Tên chương trình</Label>
+            <Input id="edit-name" v-model="editTrainingProgram.name" required />
           </div>
           <div>
-            <Label>Mô tả</Label>
-            <Textarea v-model="form.description" />
+            <Label for="edit-start_year">Năm bắt đầu</Label>
+            <Input id="edit-start_year" type="number" v-model.number="editTrainingProgram.start_year" required />
           </div>
           <div>
-            <Label>Thời gian (tháng)</Label>
-            <Input v-model="form.duration" type="number" />
+            <Label for="edit-end_year">Năm kết thúc</Label>
+            <Input id="edit-end_year" type="number" v-model.number="editTrainingProgram.end_year" required />
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" @click="dialogOpen = false">Hủy</Button>
-          <Button @click="saveProgram">{{ isEditing ? 'Cập nhật' : 'Thêm' }}</Button>
-        </DialogFooter>
+          <div>
+            <Label for="edit-major_id">Ngành</Label>
+            <select id="edit-major_id" v-model="editTrainingProgram.major_id" required
+              class="w-full px-4 py-2 border rounded-lg">
+              <option value="0">Chọn ngành</option>
+              <option v-for="major in majors" :key="major.id" :value="major.id">
+                {{ major.name }}
+              </option>
+            </select>
+          </div>
+          <Button type="submit" :disabled="loading">Cập nhật</Button>
+        </form>
       </DialogContent>
     </Dialog>
   </div>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, reactive } from 'vue'
-import { useLanguage } from '~/composables/useLanguage';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import type { AxiosResponse } from 'axios';
 
-// Set the layout for this page
+interface TrainingProgram {
+  id: number;
+  name: string;
+  start_year: number;
+  end_year: number;
+  major_id: number;
+  major?: { name: string; department?: { name: string } };
+}
+
+interface Major {
+  id: number;
+  name: string;
+}
+
+const { $axios } = useNuxtApp();
+
+const trainingPrograms = ref<TrainingProgram[]>([]);
+const majors = ref<Major[]>([]);
+const newTrainingProgram = ref<TrainingProgram>({ id: 0, name: '', start_year: 0, end_year: 0, major_id: 0 });
+const editTrainingProgram = ref<TrainingProgram>({ id: 0, name: '', start_year: 0, end_year: 0, major_id: 0 });
+const loading = ref<boolean>(false);
+const showEditModal = ref<boolean>(false);
+
+const fetchTrainingPrograms = async () => {
+  try {
+    const response: AxiosResponse<TrainingProgram[]> = await $axios.get('/training_programs');
+    trainingPrograms.value = response.data;
+  } catch (error) {
+    console.error('Error fetching training programs:', error);
+  }
+};
+
+const fetchMajors = async () => {
+  try {
+    const response: AxiosResponse<Major[]> = await $axios.get('/majors');
+    majors.value = response.data;
+  } catch (error) {
+    console.error('Error fetching majors:', error);
+  }
+};
+
+const createTrainingProgram = async () => {
+  try {
+    loading.value = true;
+    await $axios.post('/training_programs', newTrainingProgram.value);
+    newTrainingProgram.value = { id: 0, name: '', start_year: 0, end_year: 0, major_id: 0 };
+    await fetchTrainingPrograms();
+  } catch (error) {
+    console.error('Error creating training program:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openEditTrainingProgramModal = (program: TrainingProgram) => {
+  editTrainingProgram.value = { ...program };
+  showEditModal.value = true;
+};
+
+const updateTrainingProgram = async () => {
+  try {
+    loading.value = true;
+    await $axios.put(`/training_programs/${editTrainingProgram.value.id}`, editTrainingProgram.value);
+    showEditModal.value = false;
+    await fetchTrainingPrograms();
+  } catch (error) {
+    console.error('Error updating training program:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const deleteTrainingProgram = async (id: number) => {
+  try {
+    await $axios.delete(`/training_programs/${id}`);
+    await fetchTrainingPrograms();
+  } catch (error) {
+    console.error('Error deleting training program:', error);
+  }
+};
+
+onMounted(() => {
+  fetchTrainingPrograms();
+  fetchMajors();
+});
+
 definePageMeta({
   layout: 'admin',
 });
-
-// Get translations
-const { t } = useLanguage();
-
-// Check if user is logged in and is admin
-onMounted(() => {
-  const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
-    // Redirect to login if not logged in as admin
-    navigateTo('/login');
-  }
-});
-
-const programs = ref([])
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const form = reactive({
-  id: null,
-  name: '',
-  description: '',
-  duration: 0
-})
-
-const fetchPrograms = async () => {
-  try {
-    const response = await $fetch('/api/training-programs')
-    programs.value = response
-  } catch (error) {
-    console.error('Error fetching programs:', error)
-  }
-}
-
-const openCreateDialog = () => {
-  isEditing.value = false
-  form.id = null
-  form.name = ''
-  form.description = ''
-  form.duration = 0
-  dialogOpen.value = true
-}
-
-const openEditDialog = (program: any) => {
-  isEditing.value = true
-  form.id = program.id
-  form.name = program.name
-  form.description = program.description
-  form.duration = program.duration
-  dialogOpen.value = true
-}
-
-const saveProgram = async () => {
-  try {
-    if (isEditing.value) {
-      await $fetch(`/api/training-programs/${form.id}`, {
-        method: 'PUT',
-        body: { name: form.name, description: form.description, duration: form.duration }
-      })
-    } else {
-      await $fetch('/api/training-programs', {
-        method: 'POST',
-        body: form
-      })
-    }
-    dialogOpen.value = false
-    fetchPrograms()
-  } catch (error) {
-    console.error('Error saving program:', error)
-  }
-}
-
-const deleteProgram = async (id: number) => {
-  try {
-    await $fetch(`/api/training-programs/${id}`, { method: 'DELETE' })
-    fetchPrograms()
-  } catch (error) {
-    console.error('Error deleting program:', error)
-  }
-}
-
-fetchPrograms()
 </script>
+
+<style scoped></style>

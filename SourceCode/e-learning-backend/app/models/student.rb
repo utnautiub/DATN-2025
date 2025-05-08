@@ -1,3 +1,4 @@
+# app/models/student.rb
 class Student < ApplicationRecord
   belongs_to :user
   belongs_to :school_class, class_name: 'Class'
@@ -8,4 +9,25 @@ class Student < ApplicationRecord
   has_many :assignment_submissions
   has_many :exam_room_streams
   has_many :attendance_records
+
+  validates :student_code, uniqueness: true, allow_nil: true
+
+  before_create :generate_student_code
+
+  private
+
+  def generate_student_code
+    return unless major && training_program
+
+    # Lấy mã ngành và năm học
+    major_code = major.code
+    year = training_program.start_year.to_s
+
+    # Tạo số ngẫu nhiên không trùng (4 chữ số)
+    loop do
+      random_number = format("%04d", rand(1..9999))
+      self.student_code = "#{major_code}#{year}#{random_number}"
+      break unless Student.exists?(student_code: student_code)
+    end
+  end
 end

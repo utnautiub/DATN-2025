@@ -1,156 +1,152 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Quản lý môn học</h1>
-      <Button @click="openCreateDialog">
-        <Icon icon="heroicons:plus" class="mr-2 h-5 w-5" />
-        Thêm môn học
-      </Button>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold mb-6">Quản lý môn học</h1>
 
-    <!-- Table -->
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Tên môn học</TableHead>
-          <TableHead>Mã môn học</TableHead>
-          <TableHead>Số tín chỉ</TableHead>
-          <TableHead>Hành động</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="subject in subjects" :key="subject.id">
-          <TableCell>{{ subject.name }}</TableCell>
-          <TableCell>{{ subject.code }}</TableCell>
-          <TableCell>{{ subject.credits }}</TableCell>
-          <TableCell>
-            <Button variant="outline" size="sm" @click="openEditDialog(subject)" class="mr-2">
-              <Icon icon="heroicons:pencil" class="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" size="sm" @click="deleteSubject(subject.id)">
-              <Icon icon="heroicons:trash" class="h-4 w-4" />
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <!-- Form to create a new subject -->
+    <Card class="p-6 mb-6">
+      <form @submit.prevent="createSubject" class="space-y-4">
+        <div>
+          <Label for="name">Tên môn học</Label>
+          <Input id="name" v-model="newSubject.name" required />
+        </div>
+        <div>
+          <Label for="code">Mã môn học</Label>
+          <Input id="code" v-model="newSubject.code" required />
+        </div>
+        <div>
+          <Label for="description">Mô tả</Label>
+          <Input id="description" v-model="newSubject.description" />
+        </div>
+        <Button type="submit" :disabled="loading">Thêm môn học</Button>
+      </form>
+    </Card>
 
-    <!-- Create/Edit Dialog -->
-    <Dialog v-model:open="dialogOpen">
+    <!-- Subjects List -->
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Tên môn học</TableHead>
+            <TableHead>Mã môn học</TableHead>
+            <TableHead>Mô tả</TableHead>
+            <TableHead>Hành động</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="subject in subjects" :key="subject.id">
+            <TableCell>{{ subject.name }}</TableCell>
+            <TableCell>{{ subject.code }}</TableCell>
+            <TableCell>{{ subject.description || 'N/A' }}</TableCell>
+            <TableCell>
+              <Button variant="outline" @click="openEditSubjectModal(subject)">Sửa</Button>
+              <Button variant="destructive" @click="deleteSubject(subject.id)">Xóa</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
+
+    <!-- Edit Subject Modal -->
+    <Dialog v-model:open="showEditModal">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{{ isEditing ? 'Chỉnh sửa môn học' : 'Thêm môn học' }}</DialogTitle>
+          <DialogTitle>Sửa môn học</DialogTitle>
         </DialogHeader>
-        <div class="space-y-4">
+        <form @submit.prevent="updateSubject" class="space-y-4">
           <div>
-            <Label>Tên môn học</Label>
-            <Input v-model="form.name" />
+            <Label for="edit-name">Tên môn học</Label>
+            <Input id="edit-name" v-model="editSubject.name" required />
           </div>
           <div>
-            <Label>Mã môn học</Label>
-            <Input v-model="form.code" />
+            <Label for="edit-code">Mã môn học</Label>
+            <Input id="edit-code" v-model="editSubject.code" required />
           </div>
           <div>
-            <Label>Số tín chỉ</Label>
-            <Input v-model="form.credits" type="number" />
+            <Label for="edit-description">Mô tả</Label>
+            <Input id="edit-description" v-model="editSubject.description" />
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" @click="dialogOpen = false">Hủy</Button>
-          <Button @click="saveSubject">{{ isEditing ? 'Cập nhật' : 'Thêm' }}</Button>
-        </DialogFooter>
+          <Button type="submit" :disabled="loading">Cập nhật</Button>
+        </form>
       </DialogContent>
     </Dialog>
   </div>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, reactive } from 'vue'
-import { useLanguage } from '~/composables/useLanguage';
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import type { AxiosResponse } from 'axios';
 
-// Set the layout for this page
-definePageMeta({
-  layout: 'admin',
-});
+interface Subject {
+  id: number;
+  name: string;
+  code: string;
+  description?: string;
+}
 
-// Get translations
-const { t } = useLanguage();
+const { $axios } = useNuxtApp();
 
-// Check if user is logged in and is admin
-onMounted(() => {
-  const userRole = localStorage.getItem('user_role');
-  if (!userRole || userRole !== 'admin') {
-    // Redirect to login if not logged in as admin
-    navigateTo('/login');
-  }
-});
-
-const subjects = ref([])
-const dialogOpen = ref(false)
-const isEditing = ref(false)
-const form = reactive({
-  id: null,
-  name: '',
-  code: '',
-  credits: 0
-})
+const subjects = ref<Subject[]>([]);
+const newSubject = ref<Subject>({ id: 0, name: '', code: '', description: '' });
+const editSubject = ref<Subject>({ id: 0, name: '', code: '', description: '' });
+const loading = ref<boolean>(false);
+const showEditModal = ref<boolean>(false);
 
 const fetchSubjects = async () => {
   try {
-    const response = await $fetch('/api/subjects')
-    subjects.value = response
+    const response: AxiosResponse<Subject[]> = await $axios.get('/subjects');
+    subjects.value = response.data;
   } catch (error) {
-    console.error('Error fetching subjects:', error)
+    console.error('Error fetching subjects:', error);
   }
-}
+};
 
-const openCreateDialog = () => {
-  isEditing.value = false
-  form.id = null
-  form.name = ''
-  form.code = ''
-  form.credits = 0
-  dialogOpen.value = true
-}
-
-const openEditDialog = (subject: any) => {
-  isEditing.value = true
-  form.id = subject.id
-  form.name = subject.name
-  form.code = subject.code
-  form.credits = subject.credits
-  dialogOpen.value = true
-}
-
-const saveSubject = async () => {
+const createSubject = async () => {
   try {
-    if (isEditing.value) {
-      await $fetch(`/api/subjects/${form.id}`, {
-        method: 'PUT',
-        body: { name: form.name, code: form.code, credits: form.credits }
-      })
-    } else {
-      await $fetch('/api/subjects', {
-        method: 'POST',
-        body: form
-      })
-    }
-    dialogOpen.value = false
-    fetchSubjects()
+    loading.value = true;
+    await $axios.post('/subjects', newSubject.value);
+    newSubject.value = { id: 0, name: '', code: '', description: '' };
+    await fetchSubjects();
   } catch (error) {
-    console.error('Error saving subject:', error)
+    console.error('Error creating subject:', error);
+  } finally {
+    loading.value = false;
   }
-}
+};
+
+const openEditSubjectModal = (subject: Subject) => {
+  editSubject.value = { ...subject };
+  showEditModal.value = true;
+};
+
+const updateSubject = async () => {
+  try {
+    loading.value = true;
+    await $axios.put(`/subjects/${editSubject.value.id}`, editSubject.value);
+    showEditModal.value = false;
+    await fetchSubjects();
+  } catch (error) {
+    console.error('Error updating subject:', error);
+  } finally {
+    loading.value = false;
+  }
+};
 
 const deleteSubject = async (id: number) => {
   try {
-    await $fetch(`/api/subjects/${id}`, { method: 'DELETE' })
-    fetchSubjects()
+    await $axios.delete(`/subjects/${id}`);
+    await fetchSubjects();
   } catch (error) {
-    console.error('Error deleting subject:', error)
+    console.error('Error deleting subject:', error);
   }
-}
+};
 
-fetchSubjects()
+onMounted(() => {
+  fetchSubjects();
+});
+
+definePageMeta({
+  layout: 'admin',
+});
 </script>
+
+<style scoped></style>

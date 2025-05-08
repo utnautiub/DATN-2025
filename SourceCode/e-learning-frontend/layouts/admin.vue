@@ -7,14 +7,60 @@
       </div>
       <nav class="flex-1 p-2">
         <ScrollArea class="h-[calc(100vh-5rem)]">
-          <div class="space-y-1">
-            <Button v-for="item in menuItems" :key="item.path"
-              :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
-              <NuxtLink :to="item.path" class="flex items-center w-full">
-                <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
-                {{ item.label }}
-              </NuxtLink>
-            </Button>
+          <div class="space-y-2">
+            <!-- Tab Cụm 1 -->
+            <div>
+              <Button class="w-full justify-start" :variant="activeTab === 'cluster1' ? 'secondary' : 'ghost'"
+                @click="activeTab = 'cluster1'">
+                <Icon icon="heroicons:building-office" class="mr-2 h-5 w-5" />
+                Quản lý cơ sở vật chất
+              </Button>
+              <div v-if="activeTab === 'cluster1'" class="pl-4 space-y-1">
+                <Button v-for="item in cluster1Items" :key="item.path"
+                  :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
+                  <NuxtLink :to="item.path" class="flex items-center w-full">
+                    <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                    {{ item.label }}
+                  </NuxtLink>
+                </Button>
+              </div>
+            </div>
+
+            <!-- Tab Cụm 2 -->
+            <div>
+              <Button class="w-full justify-start" :variant="activeTab === 'cluster2' ? 'secondary' : 'ghost'"
+                @click="activeTab = 'cluster2'">
+                <Icon icon="heroicons:academic-cap" class="mr-2 h-5 w-5" />
+                Quản lý chương trình đào tạo
+              </Button>
+              <div v-if="activeTab === 'cluster2'" class="pl-4 space-y-1">
+                <Button v-for="item in cluster2Items" :key="item.path"
+                  :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
+                  <NuxtLink :to="item.path" class="flex items-center w-full">
+                    <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                    {{ item.label }}
+                  </NuxtLink>
+                </Button>
+              </div>
+            </div>
+
+            <!-- Tab Cụm 3 -->
+            <div>
+              <Button class="w-full justify-start" :variant="activeTab === 'cluster3' ? 'secondary' : 'ghost'"
+                @click="activeTab = 'cluster3'">
+                <Icon icon="heroicons:users" class="mr-2 h-5 w-5" />
+                Quản lý học tập
+              </Button>
+              <div v-if="activeTab === 'cluster3'" class="pl-4 space-y-1">
+                <Button v-for="item in cluster3Items" :key="item.path"
+                  :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start">
+                  <NuxtLink :to="item.path" class="flex items-center w-full">
+                    <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                    {{ item.label }}
+                  </NuxtLink>
+                </Button>
+              </div>
+            </div>
           </div>
         </ScrollArea>
       </nav>
@@ -46,15 +92,63 @@
                 </Button>
               </DrawerHeader>
               <ScrollArea class="h-[calc(100vh-4rem)]">
-                <div class="p-4 space-y-1">
-                  <Button v-for="item in menuItems" :key="item.path"
-                    :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
-                    @click="mobileMenuOpen = false">
-                    <NuxtLink :to="item.path" class="flex items-center w-full">
-                      <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
-                      {{ item.label }}
-                    </NuxtLink>
-                  </Button>
+                <div class="p-4 space-y-2">
+                  <!-- Tab Cụm 1 -->
+                  <div>
+                    <Button class="w-full justify-start" :variant="activeTab === 'cluster1' ? 'secondary' : 'ghost'"
+                      @click="activeTab = 'cluster1'; mobileMenuOpen = false">
+                      <Icon icon="heroicons:building-office" class="mr-2 h-5 w-5" />
+                      Quản lý cơ sở vật chất
+                    </Button>
+                    <div v-if="activeTab === 'cluster1'" class="pl-4 space-y-1">
+                      <Button v-for="item in cluster1Items" :key="item.path"
+                        :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
+                        @click="mobileMenuOpen = false">
+                        <NuxtLink :to="item.path" class="flex items-center w-full">
+                          <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                          {{ item.label }}
+                        </NuxtLink>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <!-- Tab Cụm 2 -->
+                  <div>
+                    <Button class="w-full justify-start" :variant="activeTab === 'cluster2' ? 'secondary' : 'ghost'"
+                      @click="activeTab = 'cluster2'; mobileMenuOpen = false">
+                      <Icon icon="heroicons:academic-cap" class="mr-2 h-5 w-5" />
+                      Quản lý chương trình đào tạo
+                    </Button>
+                    <div v-if="activeTab === 'cluster2'" class="pl-4 space-y-1">
+                      <Button v-for="item in cluster2Items" :key="item.path"
+                        :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
+                        @click="mobileMenuOpen = false">
+                        <NuxtLink :to="item.path" class="flex items-center w-full">
+                          <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                          {{ item.label }}
+                        </NuxtLink>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <!-- Tab Cụm 3 -->
+                  <div>
+                    <Button class="w-full justify-start" :variant="activeTab === 'cluster3' ? 'secondary' : 'ghost'"
+                      @click="activeTab = 'cluster3'; mobileMenuOpen = false">
+                      <Icon icon="heroicons:users" class="mr-2 h-5 w-5" />
+                      Quản lý học tập
+                    </Button>
+                    <div v-if="activeTab === 'cluster3'" class="pl-4 space-y-1">
+                      <Button v-for="item in cluster3Items" :key="item.path"
+                        :variant="route.path === item.path ? 'secondary' : 'ghost'" class="w-full justify-start"
+                        @click="mobileMenuOpen = false">
+                        <NuxtLink :to="item.path" class="flex items-center w-full">
+                          <Icon :icon="item.icon" class="mr-2 h-5 w-5" />
+                          {{ item.label }}
+                        </NuxtLink>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </ScrollArea>
             </DrawerContent>
@@ -90,7 +184,7 @@
                   <span>Cài đặt</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem class="text-red-600">
+                <DropdownMenuItem class="text-red-600" @click="logout">
                   <Icon icon="heroicons:arrow-left-on-rectangle" class="mr-2 h-4 w-4" />
                   <span>Đăng xuất</span>
                 </DropdownMenuItem>
@@ -108,113 +202,119 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
-const route = useRoute()
-const mobileMenuOpen = ref(false)
 
-const menuItems = [
+const route = useRoute();
+const router = useRouter();
+const mobileMenuOpen = ref(false);
+const activeTab = ref('cluster1');
+
+// Menu items cho Cụm 1
+const cluster1Items = [
   {
-    label: 'Dashboard',
-    path: '/admin/dashboard',
-    icon: 'heroicons:chart-bar'
+    label: 'Thông tin trường',
+    path: '/admin/school',
+    icon: 'heroicons:building-office',
   },
   {
-    label: 'Quản lý người dùng',
-    path: '/admin/users',
-    icon: 'heroicons:users'
+    label: 'Quản lý tòa nhà',
+    path: '/admin/buildings',
+    icon: 'heroicons:building-office-2',
   },
   {
-    label: 'Quản lý nhóm người dùng',
-    path: '/admin/user-groups',
-    icon: 'heroicons:user-group'
+    label: 'Quản lý phòng học',
+    path: '/admin/rooms',
+    icon: 'heroicons:home',
+  },
+  {
+    label: 'Quản lý thiết bị',
+    path: '/admin/equipment',
+    icon: 'heroicons:computer-desktop',
+  },
+  {
+    label: 'Quản lý sự cố thiết bị',
+    path: '/admin/equipment-reports',
+    icon: 'heroicons:exclamation-triangle',
+  },
+];
+
+// Menu items cho Cụm 2
+const cluster2Items = [
+  {
+    label: 'Quản lý khoa',
+    path: '/admin/departments',
+    icon: 'heroicons:academic-cap',
+  },
+  {
+    label: 'Quản lý ngành',
+    path: '/admin/majors',
+    icon: 'heroicons:book-open',
   },
   {
     label: 'Quản lý chương trình đào tạo',
     path: '/admin/training-programs',
-    icon: 'heroicons:book-open'
+    icon: 'heroicons:document-text',
+  },
+  {
+    label: 'Quản lý môn học trong chương trình',
+    path: '/admin/training-program-subjects',
+    icon: 'heroicons:document-plus',
   },
   {
     label: 'Quản lý môn học',
     path: '/admin/subjects',
-    icon: 'heroicons:academic-cap'
+    icon: 'heroicons:clipboard-document',
+  },
+];
+
+// Menu items cho Cụm 3
+const cluster3Items = [
+  {
+    label: 'Dashboard',
+    path: '/admin/dashboard',
+    icon: 'heroicons:chart-bar',
   },
   {
-    label: 'Quản lý kế hoạch đào tạo',
-    path: '/admin/training-plans',
-    icon: 'heroicons:calendar'
+    label: 'Quản lý người dùng',
+    path: '/admin/users',
+    icon: 'heroicons:users',
   },
   {
     label: 'Quản lý lớp học',
     path: '/admin/classes',
-    icon: 'heroicons:building-office'
+    icon: 'heroicons:building-office',
+  },
+  {
+    label: 'Quản lý khóa học',
+    path: '/admin/courses',
+    icon: 'heroicons:book-open',
   },
   {
     label: 'Quản lý lịch học',
     path: '/admin/schedules',
-    icon: 'heroicons:clock'
+    icon: 'heroicons:clock',
   },
   {
-    label: 'Quản lý phòng học',
-    path: '/admin/classrooms',
-    icon: 'heroicons:home'
+    label: 'Phân công môn học',
+    path: '/admin/subject-assignments',
+    icon: 'heroicons:academic-cap',
   },
   {
-    label: 'Cấu hình công cụ trực tuyến',
-    path: '/admin/online-tools',
-    icon: 'heroicons:video-camera'
+    label: 'Quản lý ghi danh',
+    path: '/admin/enrollments',
+    icon: 'heroicons:user-plus',
   },
-  {
-    label: 'Quản lý tài liệu',
-    path: '/admin/resources',
-    icon: 'heroicons:document-text'
-  },
-  {
-    label: 'Quản lý diễn đàn',
-    path: '/admin/forums',
-    icon: 'heroicons:chat-bubble-left-right'
-  },
-  {
-    label: 'Giám sát tiến độ học tập',
-    path: '/admin/learning-progress',
-    icon: 'heroicons:chart-pie'
-  },
-  {
-    label: 'Quản lý ngân hàng câu hỏi',
-    path: '/admin/question-bank',
-    icon: 'heroicons:question-mark-circle'
-  },
-  {
-    label: 'Quản lý kỳ thi',
-    path: '/admin/exams',
-    icon: 'heroicons:clipboard-document-check'
-  },
-  {
-    label: 'Quản lý ca thi',
-    path: '/admin/exam-sessions',
-    icon: 'heroicons:clock'
-  },
-  {
-    label: 'Quản lý học phí',
-    path: '/admin/fees',
-    icon: 'heroicons:currency-dollar'
-  },
-  {
-    label: 'Báo cáo tổng thể',
-    path: '/admin/reports',
-    icon: 'heroicons:document-chart-bar'
-  },
-  {
-    label: 'Phân tích dữ liệu',
-    path: '/admin/analytics',
-    icon: 'heroicons:chart-bar-square'
-  },
-  {
-    label: 'Quản lý thông báo',
-    path: '/admin/notifications',
-    icon: 'heroicons:megaphone'
-  }
-]
+];
+
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user_role');
+  localStorage.removeItem('school_id');
+  router.push('/login');
+};
 </script>
 
 <style scoped></style>

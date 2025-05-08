@@ -3,69 +3,100 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :authenticate_user
-      before_action :require_admin_or_super_admin
+      before_action :require_admin_schools
 
       def index
-        if @current_user.role == 'SuperAdmin'
-          users = User.where(role: 'AdminSchools').includes(:school)
-        else
-          users = User.where(school_id: @current_user.school_id).where.not(role: 'SuperAdmin').includes(:school)
-        end
-        render json: users.as_json(include: { school: { only: [:id, :name] } }, except: [:password_digest])
+        users = User.where(school_id: @current_user.school_id)
+                    .includes(student: { class: [], major: [], training_program: [] }, teacher: { subjects: [] })
+        render json: users.as_json(include: {
+          student: { include: { class: { only: [:name] }, major: { only: [:name] }, training_program: { only: [:name] } }, only: [:student_code] },
+          teacher: { include: { subjects: { only: [:name] } }, only: [:teacher_code] }
+        })
       end
 
       def create
         user = User.new(user_params.merge(school_id: @current_user.school_id))
-        if user.save
-          render json: user.as_json(include: { school: { only: [:id, :name] } }, except: [:password_digest]), status: :created
-        else
-          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-        end
-      end
+        user.role = params[:role] if params[:role].present?
 
-      def create_admin_account
-        school = School.find(params[:school_id])
-        user = User.new(user_params.merge(school_id: school.id, role: 'AdminSchools'))
+        # Xử lý Student
+        if user.role == 'Student' && params[:student].present?
+          student_params = params.require(:student).permit(:department_id, :major_id, :class_id, :training_program_id)
+          student = Student.new(student_params)
+          user.student = student
+        end
+
+        # Xử lý Teacher
+        if user.role == 'Teacher' && params[:teacher].present?
+          teacher_params = params.require(:teacher).permit(:department_id)
+          teacher = Teacher.new(teacher_params)
+          user.teacher = teacher
+        end
+
         if user.save
-          render json: user.as_json(include: { school: { only: [:id, :name] } }, except: [:password_digest]), status: :created
+          # Tạo mã tự động cho Student hoặc Teacher
+          if user.student
+            user.student.update(student_code: "STU#{format('%06d', user.student.id)}")
+          elsif user.teacher
+            user.teacher.update(teacher_code: "TCH#{format('%06d', user.teacher.id)}")
+            # Gán môn học (chuyên môn) cho giáo viên thông qua subject_assignments
+            if params[:teacher].present? && params[:teacher][:subject_id].present?
+              SubjectAssignment.create!(
+                school_id: @current_user.school_id,
+                teacher_id: user.teacher.id,
+                subject_id: params[:teacher][:subject_id]
+              )
+            end
+          end
+          render json: user.as_json(include: {
+            student: { include: { class: { only: [:name] }, major: { only: [:name] }, training_program: { only: [:name] } }, only: [:student_code] },
+            teacher: { include: { subjects: { only: [:name] } }, only: [:teacher_code] }
+          }), status: :created
         else
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
       def update
-        user = User.find(params[:id])
-        if user.update(user_params.except(:password))
-          if user_params[:password].present?
-            user.password = user_params[:password]
-            user.save
-          end
-          render json: user.as_json(include: { school: { only: [:id, :name] } }, except: [:password_digest])
+        user = User.where(school_id: @current_user.school_id).find(params[:id])
+        if user.update(user_params)
+          render json: user.as_json(include: {
+            student: { include: { class: { only: [:name] }, major: { only: [:name] }, training_program: { only: [:name] } }, only: [:student_code] },
+            teacher: { include: { subjects: { only: [:name] } }, only: [:teacher_code] }
+          })
         else
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
       def destroy
-        user = User.find(params[:id])
-        # Chỉ Super Admin mới được xóa tài khoản AdminSchools
-        if user.role == 'AdminSchools' && @current_user.role != 'SuperAdmin'
-          render json: { error: 'Forbidden: Only Super Admin can delete Admin Schools accounts' }, status: :forbidden
+        user = User.where(school_id: @current_user.school_id).find(params[:id])
+        if @current_user.role == 'AdminSchools' && user.role == 'AdminSchools'
+          render json: { error: 'Không thể xóa tài khoản AdminSchools' }, status: :forbidden
+        else
+          user.destroy
+          head :no_content
+        end
+      end
+
+      def create_admin_account
+        school = School.find(params[:school_id])
+        unless @current_user.role == 'SuperAdmin'
+          render json: { error: 'Forbidden' }, status: :forbidden
           return
         end
-        # AdminSchools không được xóa chính mình
-        if user.id == @current_user.id && @current_user.role == 'AdminSchools'
-          render json: { error: 'Forbidden: Cannot delete your own account' }, status: :forbidden
-          return
+
+        user = User.new(user_params.merge(school_id: school.id, role: 'AdminSchools'))
+        if user.save
+          render json: user, status: :created
+        else
+          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
-        user.destroy
-        head :no_content
       end
 
       private
 
       def user_params
-        params.permit(:username, :password, :role, :admin_level, :google_access_token, :google_refresh_token, :google_token_expiry)
+        params.permit(:username, :password, :role)
       end
 
       def authenticate_user
@@ -78,9 +109,10 @@ module Api
         end
       end
 
-      def require_admin_or_super_admin
-        render json: { error: 'Forbidden' }, status: :forbidden unless ['SuperAdmin', 'AdminSchools'].include?(@current_user.role)
+      def require_admin_schools
+        render json: { error: 'Forbidden' }, status: :forbidden unless @current_user.role == 'AdminSchools' || @current_user.role == 'SuperAdmin'
       end
     end
   end
 end
+
