@@ -3,7 +3,7 @@ module Api
   module V1
     class SchoolsController < ApplicationController
       before_action :authenticate_user
-      before_action :require_super_admin, except: [:show] # Chỉ SuperAdmin có quyền tạo, sửa, xóa
+      before_action :require_super_admin, except: [:show]
 
       def index
         schools = School.all
@@ -12,7 +12,30 @@ module Api
 
       def show
         school = School.find(params[:id])
-        render json: school
+        
+        # Thêm thông tin chi tiết về trường học
+        school_details = school.as_json(
+          include: {
+            departments: { only: [:id, :name] },
+            buildings: { only: [:id, :name, :address] },
+            users: { 
+              only: [:id, :username, :role],
+              where: { role: 'AdminSchools' }
+            }
+          }
+        )
+        
+        # Thêm thống kê
+        school_details[:stats] = {
+          departments_count: school.departments.count,
+          buildings_count: school.buildings.count,
+          teachers_count: school.teachers.count,
+          students_count: school.students.count,
+          classes_count: school.school_classes.count, # Đổi từ classes thành school_classes
+          courses_count: school.courses.count
+        }
+        
+        render json: school_details
       end
 
       def create

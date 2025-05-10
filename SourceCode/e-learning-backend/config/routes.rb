@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       resources :schools, only: [:index, :show, :create, :update, :destroy]
       post '/schools/:school_id/admin_accounts', to: 'users#create_admin_account'
       resources :users, only: [:index, :create, :update, :destroy]
-      resources :classes, only: [:index, :create, :update, :destroy]
+      resources :school_classes, only: [:index, :create, :update, :destroy]
       resources :courses, only: [:index, :create, :update, :destroy]
       resources :schedules, only: [:index, :create, :update, :destroy] do
         member do
@@ -50,3 +50,4 @@ Rails.application.routes.draw do
   end
 
 end
+

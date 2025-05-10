@@ -133,15 +133,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_150956) do
     t.datetime "deleted_at", precision: nil
   end
 
-  create_table "classes", force: :cascade do |t|
-    t.bigint "school_id"
-    t.string "name"
-    t.bigint "homeroom_teacher_id"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.datetime "deleted_at", precision: nil
-  end
-
   create_table "courses", force: :cascade do |t|
     t.bigint "school_id"
     t.bigint "subject_id"
@@ -340,6 +331,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_150956) do
     t.datetime "deleted_at", precision: nil
   end
 
+  create_table "school_classes", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "name"
+    t.bigint "homeroom_teacher_id"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+  end
+
   create_table "schools", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -465,4 +465,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_150956) do
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
   end
+
+  add_foreign_key "equipment_items", "room_equipments"
+  add_foreign_key "equipment_reports", "equipment_items"
 end

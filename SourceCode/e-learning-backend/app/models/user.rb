@@ -1,9 +1,9 @@
 # app/models/user.rb
 class User < ApplicationRecord
   has_secure_password
+  acts_as_paranoid
 
   belongs_to :school, optional: true
-  # Thay đổi từ has_many thành has_one
   has_one :teacher, dependent: :destroy
   has_one :student, dependent: :destroy
   has_many :forum_posts
@@ -20,6 +20,9 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :teacher, allow_destroy: true
   accepts_nested_attributes_for :student, allow_destroy: true
+
+  default_scope { where(deleted_at: nil) }
+  scope :with_deleted, -> { unscope(where: :deleted_at).where.not(deleted_at: nil) }
 
   private
 

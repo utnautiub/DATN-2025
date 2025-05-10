@@ -1,9 +1,10 @@
 # app/models/student.rb
 class Student < ApplicationRecord
+  acts_as_paranoid
   belongs_to :user
-  belongs_to :school_class, class_name: 'Class'
-  belongs_to :major
-  belongs_to :training_program
+  belongs_to :school_class, foreign_key: :class_id
+  belongs_to :major, optional: true
+  belongs_to :training_program, optional: true
   has_many :enrollments
   has_many :submissions
   has_many :assignment_submissions
@@ -13,6 +14,9 @@ class Student < ApplicationRecord
   validates :student_code, uniqueness: true, allow_nil: true
 
   before_create :generate_student_code
+
+  default_scope { where(deleted_at: nil) }
+  scope :with_deleted, -> { unscope(where: :deleted_at).where.not(deleted_at: nil) }
 
   private
 
