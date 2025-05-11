@@ -1,0 +1,48 @@
+# Hướng dẫn cập nhật tất cả controllers
+
+## 1. Các bước cập nhật cơ bản cho mỗi controller:
+
+1. Thay đổi lớp kế thừa từ `ApplicationController` sang `Api::BaseController`
+2. Xóa `before_action :authenticate_user` vì đã được thêm trong `Authenticable`
+3. Xóa các phương thức `authenticate_user` và `require_admin_schools` vì đã được di chuyển vào concerns
+4. Thay các phương thức render bằng các phương thức responder tương ứng:
+   - `render json: data` → `respond_with_collection(data)`
+   - `render json: data, status: :created` → `respond_with_resource(data, {}, :created)`
+   - `render json: { errors: errors }` → `respond_with_errors(errors)`
+   - `head :no_content` → `respond_with_no_content`
+5. Thêm phương thức `model_class` để trả về model tương ứng
+
+## 2. Xử lý phân quyền:
+
+1. Các controllers chỉ dành cho AdminSchools: giữ nguyên `before_action :require_admin_schools`
+2. Các controllers phức tạp hơn: sử dụng các phương thức từ `AuthorizationChecker`
+3. Tuỳ chỉnh phân quyền cho từng action nếu cần
+
+## 3. Cải tiến khác:
+
+1. Tối ưu truy vấn bằng cách sử dụng `includes` để giảm số lượng truy vấn
+2. Đảm bảo truy vấn được giới hạn trong phạm vi trường học của người dùng hiện tại
+3. Tách logic nghiệp vụ phức tạp ra service nếu cần
+4. Tiêu chuẩn hóa cách format JSON response
+
+## 4. Danh sách controllers còn lại cần cập nhật:
+
+- departments_controller.rb
+- equipment_items_controller.rb
+- majors_controller.rb
+- rooms_controller.rb
+- subjects_controller.rb
+- training_programs_controller.rb
+- user_groups_controller.rb
+- room_equipments_controller.rb
+- schedules_controller.rb
+- subject_assignments_controller.rb
+- teachers_controller.rb
+- training_program_subjects_controller.rb
+- courses_controller.rb
+
+## 5. Kiểm thử:
+
+1. Đảm bảo tất cả các API vẫn hoạt động như cũ
+2. Kiểm tra logic phân quyền hoạt động chính xác
+3. Kiểm tra các response format có nhất quán 

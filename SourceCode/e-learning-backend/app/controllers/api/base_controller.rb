@@ -2,6 +2,7 @@ module Api
   class BaseController < ApplicationController
     include Authenticable
     include Responder
+    include AuthorizationChecker
 
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -18,6 +19,14 @@ module Api
 
     def record_invalid(exception)
       respond_with_errors(exception.record.errors.full_messages)
+    end
+
+    def authorize_resource(resource_id, resource_type, action)
+      unless authorized_for_resource?(resource_type, resource_id, action)
+        respond_with_errors("Bạn không có quyền thực hiện hành động này", :forbidden)
+        return false
+      end
+      true
     end
   end
 end

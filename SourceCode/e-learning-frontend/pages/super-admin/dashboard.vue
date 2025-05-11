@@ -13,7 +13,7 @@
 
     <!-- Overview Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Card>
+      <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
         <CardHeader class="pb-2">
           <CardTitle class="text-base font-medium">Tổng số trường học</CardTitle>
           <CardDescription>Số lượng trường đang hoạt động</CardDescription>
@@ -28,14 +28,14 @@
           </div>
         </CardContent>
         <CardFooter class="pt-0">
-          <NuxtLink to="/super-admin/schools" class="text-sm text-primary flex items-center">
+          <NuxtLink to="/super-admin/schools" class="text-sm text-primary flex items-center hover:underline">
             Xem chi tiết
             <Icon icon="heroicons:arrow-right" class="ml-1 h-4 w-4" />
           </NuxtLink>
         </CardFooter>
       </Card>
 
-      <Card>
+      <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
         <CardHeader class="pb-2">
           <CardTitle class="text-base font-medium">Tổng số Admin Schools</CardTitle>
           <CardDescription>Số lượng tài khoản quản trị trường</CardDescription>
@@ -50,14 +50,14 @@
           </div>
         </CardContent>
         <CardFooter class="pt-0">
-          <NuxtLink to="/super-admin/admin-accounts" class="text-sm text-primary flex items-center">
+          <NuxtLink to="/super-admin/admin-accounts" class="text-sm text-primary flex items-center hover:underline">
             Xem chi tiết
             <Icon icon="heroicons:arrow-right" class="ml-1 h-4 w-4" />
           </NuxtLink>
         </CardFooter>
       </Card>
 
-      <Card>
+      <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
         <CardHeader class="pb-2">
           <CardTitle class="text-base font-medium">Hoạt động gần đây</CardTitle>
           <CardDescription>Thống kê 7 ngày qua</CardDescription>
@@ -72,7 +72,7 @@
           </div>
         </CardContent>
         <CardFooter class="pt-0">
-          <Button variant="ghost" size="sm" class="text-sm text-muted-foreground">
+          <Button variant="ghost" size="sm" class="text-sm text-muted-foreground p-0 h-auto">
             Chức năng đang phát triển
           </Button>
         </CardFooter>
@@ -83,7 +83,7 @@
     <div>
       <h2 class="text-xl font-semibold mb-4">Hành động nhanh</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card class="hover:bg-accent/50 transition-colors cursor-pointer">
+        <Card class="hover:bg-accent/50 transition-all duration-200 cursor-pointer border-border/50 hover:shadow-md">
           <NuxtLink to="/super-admin/schools" class="block p-4">
             <div class="flex flex-col items-center text-center gap-2">
               <div class="p-3 rounded-full bg-primary/10 text-primary">
@@ -95,7 +95,7 @@
           </NuxtLink>
         </Card>
 
-        <Card class="hover:bg-accent/50 transition-colors cursor-pointer">
+        <Card class="hover:bg-accent/50 transition-all duration-200 cursor-pointer border-border/50 hover:shadow-md">
           <NuxtLink to="/super-admin/admin-accounts" class="block p-4">
             <div class="flex flex-col items-center text-center gap-2">
               <div class="p-3 rounded-full bg-primary/10 text-primary">
@@ -118,11 +118,11 @@
         </NuxtLink>
       </div>
 
-      <Card>
+      <Card class="border-border/50 overflow-hidden shadow-sm">
         <CardContent class="p-0">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow class="hover:bg-accent/50">
                 <TableHead>Tên trường</TableHead>
                 <TableHead>Địa chỉ</TableHead>
                 <TableHead>Số điện thoại</TableHead>
@@ -131,14 +131,14 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow v-for="school in schools.slice(0, 5)" :key="school.id">
+              <TableRow v-for="school in schools.slice(0, 5)" :key="school.id" class="hover:bg-accent/50 transition-colors duration-200">
                 <TableCell class="font-medium">{{ school.name }}</TableCell>
                 <TableCell>{{ school.address }}</TableCell>
                 <TableCell>{{ school.phone || '—' }}</TableCell>
                 <TableCell>{{ school.email || '—' }}</TableCell>
                 <TableCell class="text-right">
                   <NuxtLink :to="`/super-admin/schools/${school.id}`">
-                    <Button variant="ghost" size="sm" class="h-8 w-8 p-0">
+                    <Button variant="ghost" size="sm" class="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
                       <Icon icon="heroicons:eye" class="h-4 w-4" />
                     </Button>
                   </NuxtLink>

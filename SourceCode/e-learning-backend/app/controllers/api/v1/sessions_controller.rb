@@ -1,12 +1,14 @@
 # app/controllers/api/v1/sessions_controller.rb
 module Api
   module V1
-    class SessionsController < ApplicationController
+    class SessionsController < Api::BaseController
+      skip_before_action :authenticate_user, only: [ :create ]
+
       def create
         # Bước 1: Kiểm tra username, trả về danh sách trường nếu trùng
         unless params[:school_id]
           unless params[:username]
-            render json: { error: 'Username is required' }, status: :unprocessable_entity
+            respond_with_errors("Username is required")
             return
           end
 
@@ -14,7 +16,7 @@ module Api
           users = User.where(username: params[:username])
 
           if users.empty?
-            render json: { error: 'Invalid username' }, status: :unauthorized
+            respond_with_errors("Invalid username", :unauthorized)
             return
           end
 
@@ -23,38 +25,38 @@ module Api
             user = users.first
             if user.authenticate(params[:password])
               token = encode_token({ user_id: user.id, role: user.role, school_id: user.school_id })
-              render json: { user: user.as_json(except: [:password_digest]), token: token }, status: :ok
+              render json: { user: user.as_json(except: [ :password_digest ]), token: token }, status: :ok
             else
-              render json: { error: 'Invalid password' }, status: :unauthorized
+              respond_with_errors("Invalid password", :unauthorized)
             end
             return
           end
 
           # Nếu có nhiều tài khoản với username này, trả về danh sách trường
           schools = users.map { |user| user.school }.compact
-          render json: { schools: schools.as_json(only: [:id, :name]), requires_school_selection: true }, status: :ok
+          render json: { schools: schools.as_json(only: [ :id, :name ]), requires_school_selection: true }, status: :ok
           return
         end
 
         # Bước 2: Đăng nhập với school_id
         unless params[:username] && params[:password] && params[:school_id]
-          render json: { error: 'Username, password, and school_id are required' }, status: :unprocessable_entity
+          respond_with_errors("Username, password, and school_id are required")
           return
         end
 
         user = User.find_by(username: params[:username], school_id: params[:school_id])
         if user&.authenticate(params[:password])
           token = encode_token({ user_id: user.id, role: user.role, school_id: user.school_id })
-          render json: { user: user.as_json(except: [:password_digest]), token: token }, status: :ok
+          render json: { user: user.as_json(except: [ :password_digest ]), token: token }, status: :ok
         else
-          render json: { error: 'Invalid username, password, or school' }, status: :unauthorized
+          respond_with_errors("Invalid username, password, or school", :unauthorized)
         end
       end
 
       private
 
       def encode_token(payload)
-        JWT.encode(payload, 'your_secret_key')
+        JWT.encode(payload, "your_secret_key")
       end
     end
   end

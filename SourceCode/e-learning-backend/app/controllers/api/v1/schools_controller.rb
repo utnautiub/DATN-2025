@@ -1,30 +1,29 @@
 # app/controllers/api/v1/schools_controller.rb
 module Api
   module V1
-    class SchoolsController < ApplicationController
-      before_action :authenticate_user
-      before_action :require_super_admin, except: [:show]
+    class SchoolsController < Api::BaseController
+      before_action :require_super_admin, except: [ :show ]
 
       def index
         schools = School.all
-        render json: schools
+        respond_with_collection(schools)
       end
 
       def show
         school = School.find(params[:id])
-        
+
         # Thêm thông tin chi tiết về trường học
         school_details = school.as_json(
           include: {
-            departments: { only: [:id, :name] },
-            buildings: { only: [:id, :name, :address] },
-            users: { 
-              only: [:id, :username, :role],
-              where: { role: 'AdminSchools' }
+            departments: { only: [ :id, :name ] },
+            buildings: { only: [ :id, :name, :address ] },
+            users: {
+              only: [ :id, :username, :role ],
+              where: { role: "AdminSchools" }
             }
           }
         )
-        
+
         # Thêm thống kê
         school_details[:stats] = {
           departments_count: school.departments.count,
@@ -34,32 +33,32 @@ module Api
           classes_count: school.school_classes.count, # Đổi từ classes thành school_classes
           courses_count: school.courses.count
         }
-        
+
         render json: school_details
       end
 
       def create
         school = School.new(school_params)
         if school.save
-          render json: school, status: :created
+          respond_with_resource(school, {}, :created)
         else
-          render json: { errors: school.errors.full_messages }, status: :unprocessable_entity
+          respond_with_errors(school.errors.full_messages)
         end
       end
 
       def update
         school = School.find(params[:id])
         if school.update(school_params)
-          render json: school
+          respond_with_resource(school)
         else
-          render json: { errors: school.errors.full_messages }, status: :unprocessable_entity
+          respond_with_errors(school.errors.full_messages)
         end
       end
 
       def destroy
         school = School.find(params[:id])
         school.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       private
@@ -68,18 +67,8 @@ module Api
         params.permit(:name, :address, :phone, :email)
       end
 
-      def authenticate_user
-        token = request.headers['Authorization']&.split(' ')&.last
-        begin
-          decoded = JWT.decode(token, 'your_secret_key', true, algorithm: 'HS256')
-          @current_user = User.find(decoded[0]['user_id'])
-        rescue
-          render json: { error: 'Unauthorized' }, status: :unauthorized
-        end
-      end
-
-      def require_super_admin
-        render json: { error: 'Forbidden' }, status: :forbidden unless @current_user.role == 'SuperAdmin'
+      def model_class
+        School
       end
     end
   end

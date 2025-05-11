@@ -1,23 +1,23 @@
 # app/controllers/api/v1/enrollments_controller.rb
 module Api
   module V1
-    class EnrollmentsController < ApplicationController
-      before_action :authenticate_user
-      before_action :require_admin_schools
+    class EnrollmentsController < Api::BaseController
+      before_action :require_admin_schools, only: [ :index, :destroy ]
+      before_action :check_student_authorization, only: [ :create ]
 
       def index
         enrollments = Enrollment.joins(student: { class: :school })
                                .where(classes: { school_id: @current_user.school_id })
                                .includes(:student, :course)
-        render json: enrollments.as_json(include: { student: { only: [:name] }, course: { only: [:name] } })
+        respond_with_collection(enrollments, include: { student: { only: [ :name ] }, course: { only: [ :name ] } })
       end
 
       def create
         enrollment = Enrollment.new(enrollment_params)
         if enrollment.save
-          render json: enrollment, status: :created
+          respond_with_resource(enrollment, {}, :created)
         else
-          render json: { errors: enrollment.errors.full_messages }, status: :unprocessable_entity
+          respond_with_errors(enrollment.errors.full_messages)
         end
       end
 
@@ -26,7 +26,7 @@ module Api
                               .where(classes: { school_id: @current_user.school_id })
                               .find(params[:id])
         enrollment.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       private
@@ -35,18 +35,27 @@ module Api
         params.permit(:student_id, :course_id)
       end
 
-      def authenticate_user
-        token = request.headers['Authorization']&.split(' ')&.last
-        begin
-          decoded = JWT.decode(token, 'your_secret_key', true, algorithm: 'HS256')
-          @current_user = User.find(decoded[0]['user_id'])
-        rescue
-          render json: { error: 'Unauthorized' }, status: :unauthorized
+      def check_student_authorization
+        # AdminSchools có thể tạo enrollment cho bất kỳ học sinh nào trong trường
+        return true if @current_user.role == "AdminSchools"
+
+        # Học sinh chỉ có thể tạo enrollment cho chính mình
+        if @current_user.role == "Student"
+          student = Student.find_by(user_id: @current_user.id)
+          unless student && student.id.to_s == params[:student_id].to_s
+            respond_with_errors("Bạn không có quyền đăng ký cho học sinh khác", :forbidden)
+            return false
+          end
+        else
+          respond_with_errors("Bạn không có quyền thực hiện hành động này", :forbidden)
+          return false
         end
+
+        true
       end
 
-      def require_admin_schools
-        render json: { error: 'Forbidden' }, status: :forbidden unless @current_user.role == 'AdminSchools'
+      def model_class
+        Enrollment
       end
     end
   end

@@ -1,57 +1,50 @@
 # app/controllers/api/v1/departments_controller.rb
 module Api
   module V1
-    class DepartmentsController < ApplicationController
-      before_action :authenticate_user
+    class DepartmentsController < Api::BaseController
       before_action :require_admin_schools
 
       def index
         departments = Department.where(school_id: @current_user.school_id)
-        render json: departments
+        respond_with_collection(departments)
       end
 
       def create
         department = Department.new(department_params.merge(school_id: @current_user.school_id))
         if department.save
-          render json: department, status: :created
+          respond_with_resource(department, {}, :created)
         else
-          render json: { errors: department.errors.full_messages }, status: :unprocessable_entity
+          respond_with_errors(department.errors.full_messages)
         end
       end
 
       def update
         department = Department.where(school_id: @current_user.school_id).find(params[:id])
         if department.update(department_params)
-          render json: department
+          respond_with_resource(department)
         else
-          render json: { errors: department.errors.full_messages }, status: :unprocessable_entity
+          respond_with_errors(department.errors.full_messages)
         end
       end
 
       def destroy
         department = Department.where(school_id: @current_user.school_id).find(params[:id])
         department.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       private
 
       def department_params
-        params.permit(:name, :code)
+        params.permit(:name, :description)
       end
 
-      def authenticate_user
-        token = request.headers['Authorization']&.split(' ')&.last
-        begin
-          decoded = JWT.decode(token, 'your_secret_key', true, algorithm: 'HS256')
-          @current_user = User.find(decoded[0]['user_id'])
-        rescue
-          render json: { error: 'Unauthorized' }, status: :unauthorized
-        end
+      def model_class
+        Department
       end
 
       def require_admin_schools
-        render json: { error: 'Forbidden' }, status: :forbidden unless @current_user.role == 'AdminSchools'
+        render json: { error: "Forbidden" }, status: :forbidden unless @current_user.role == "AdminSchools"
       end
     end
   end

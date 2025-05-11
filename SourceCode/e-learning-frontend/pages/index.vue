@@ -1,235 +1,257 @@
 <template>
   <div>
-    <section class="py-20">
+    <section class="py-40 mt-4 bg-gradient-to-b to-primary/5 from-background">
       <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6">{{ t('landing.hero.title') }}</h1>
-        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">{{ t('landing.hero.subtitle') }}</p>
+        <div class="flex justify-center mb-6">
+          <img src="https://tlu.edu.vn/Portals/_default/skins/tluvie/images/logo.png" alt="Đại học Thủy Lợi" class="h-24" />
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-primary">Hệ Thống Quản Lý Đào Tạo</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-muted-foreground">Trường Đại học Thủy Lợi</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <NuxtLink to="/login" class="btn btn-lg ">
-            {{ t('landing.hero.startLearning') }}
+          <NuxtLink to="/login">
+            <Button size="lg" class="font-medium">
+              Đăng nhập hệ thống
+            </Button>
           </NuxtLink>
-          <NuxtLink to="/#courses" class="btn btn-lg btn-outline ">
-            {{ t('landing.hero.exploreCourses') }}
+          <NuxtLink to="/#features">
+            <Button size="lg" variant="outline" class="font-medium">
+              Tìm hiểu thêm
+            </Button>
           </NuxtLink>
         </div>
       </div>
     </section>
-    <section id="courses" class="py-16">
+
+    <section id="features" class="py-16">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold mb-4">{{ t('landing.courses.title') }}</h2>
-          <p class="text-gray-600 max-w-2xl mx-auto">{{ t('landing.courses.description') }}</p>
+          <h2 class="text-3xl font-bold mb-4">Tính năng hệ thống</h2>
+          <p class="text-muted-foreground max-w-2xl mx-auto">Hệ thống quản lý đào tạo trực tuyến giúp sinh viên, giảng viên và cán bộ quản lý dễ dàng truy cập thông tin và nguồn tài nguyên học tập</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Card>
-            <div class="rounded-lg">
-              <div class="relative">
-                <img src="https://placehold.co/600x400/3b82f6/FFFFFF/png?text=Development" alt="Course"
-                  class="w-full h-48 object-cover">
-                <div class="absolute top-4 right-4 bg-primary text-white px-2 py-1 rounded text-sm font-semibold">
-                  {{ t('landing.courses.popular') }}
-                </div>
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardHeader class="pb-2">
+              <div class="p-3 rounded-full bg-primary/10 text-primary w-fit">
+                <Icon icon="heroicons:academic-cap" class="h-6 w-6" />
               </div>
-              <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-sm text-gray-500">{{ t('landing.courses.webDevelopment') }}</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <span class="ml-1 text-sm font-semibold">4.8</span>
-                  </div>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">{{ t('landing.courses.fullstackTitle') }}</h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">{{ t('landing.courses.fullstackDescription') }}</p>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Instructor" class="h-8 w-8 rounded-full">
-                    <span class="ml-2 text-sm font-medium">{{ t('landing.courses.instructor1') }}</span>
-                  </div>
-                  <span class="font-bold text-primary">{{ t('landing.courses.price1') }}</span>
-                </div>
-              </div>
-            </div>
+              <CardTitle class="text-xl font-medium mt-4">Quản lý học tập</CardTitle>
+              <CardDescription>Truy cập thông tin khóa học, lịch học và tài liệu học tập</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul class="space-y-2 text-muted-foreground">
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Quản lý thời khóa biểu</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Truy cập tài liệu học tập</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Theo dõi kết quả học tập</span>
+                </li>
+              </ul>
+            </CardContent>
           </Card>
 
-          <Card>
-            <div class="rounded-lg">
-              <div class="relative">
-                <img src="https://placehold.co/600x400/3b82f6/FFFFFF/png?text=Development" alt="Course"
-                  class="w-full h-48 object-cover">
-                <div class="absolute top-4 right-4 bg-primary text-white px-2 py-1 rounded text-sm font-semibold">
-                  {{ t('landing.courses.popular') }}
-                </div>
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardHeader class="pb-2">
+              <div class="p-3 rounded-full bg-primary/10 text-primary w-fit">
+                <Icon icon="heroicons:document-text" class="h-6 w-6" />
               </div>
-              <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-sm text-gray-500">{{ t('landing.courses.webDevelopment') }}</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <span class="ml-1 text-sm font-semibold">4.8</span>
-                  </div>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">{{ t('landing.courses.fullstackTitle') }}</h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">{{ t('landing.courses.fullstackDescription') }}</p>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Instructor" class="h-8 w-8 rounded-full">
-                    <span class="ml-2 text-sm font-medium">{{ t('landing.courses.instructor1') }}</span>
-                  </div>
-                  <span class="font-bold text-primary">{{ t('landing.courses.price1') }}</span>
-                </div>
-              </div>
-            </div>
+              <CardTitle class="text-xl font-medium mt-4">Quản lý đào tạo</CardTitle>
+              <CardDescription>Công cụ hiệu quả cho cán bộ quản lý và giảng viên</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul class="space-y-2 text-muted-foreground">
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Quản lý lớp học và khóa học</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Điểm danh và đánh giá học tập</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Quản lý chương trình đào tạo</span>
+                </li>
+              </ul>
+            </CardContent>
           </Card>
 
-          <Card>
-            <div class="rounded-lg">
-              <div class="relative">
-                <img src="https://placehold.co/600x400/3b82f6/FFFFFF/png?text=Development" alt="Course"
-                  class="w-full h-48 object-cover">
-                <div class="absolute top-4 right-4 bg-primary text-white px-2 py-1 rounded text-sm font-semibold">
-                  {{ t('landing.courses.popular') }}
-                </div>
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardHeader class="pb-2">
+              <div class="p-3 rounded-full bg-primary/10 text-primary w-fit">
+                <Icon icon="heroicons:chart-bar" class="h-6 w-6" />
               </div>
-              <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-sm text-gray-500">{{ t('landing.courses.webDevelopment') }}</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <span class="ml-1 text-sm font-semibold">4.8</span>
-                  </div>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">{{ t('landing.courses.fullstackTitle') }}</h3>
-                <p class="text-gray-600 mb-4 line-clamp-2">{{ t('landing.courses.fullstackDescription') }}</p>
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Instructor" class="h-8 w-8 rounded-full">
-                    <span class="ml-2 text-sm font-medium">{{ t('landing.courses.instructor1') }}</span>
-                  </div>
-                  <span class="font-bold text-primary">{{ t('landing.courses.price1') }}</span>
-                </div>
-              </div>
-            </div>
+              <CardTitle class="text-xl font-medium mt-4">Báo cáo & Thống kê</CardTitle>
+              <CardDescription>Công cụ phân tích dữ liệu và báo cáo</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul class="space-y-2 text-muted-foreground">
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Thống kê điểm số và kết quả</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Theo dõi tiến độ học tập</span>
+                </li>
+                <li class="flex items-center">
+                  <Icon icon="heroicons:check" class="h-5 w-5 text-primary mr-2" />
+                  <span>Báo cáo tổng hợp thông tin đào tạo</span>
+                </li>
+              </ul>
+            </CardContent>
           </Card>
-        </div>
-
-        <div class="text-center mt-12">
-          <NuxtLink to="" class="btn btn-primary">
-            {{ t('landing.courses.viewAll') }}
-          </NuxtLink>
         </div>
       </div>
     </section>
 
-    <section id="about" class="py-16">
+    <section class="py-16 bg-muted/50">
       <div class="container mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-center gap-12">
           <div class="lg:w-1/2">
-            <img src="https://placehold.co/800x600/e2e8f0/64748b/png?text=About+Us" alt="About Us"
-              class="rounded-lg shadow-lg">
+            <img src="https://i1-vnexpress.vnecdn.net/2023/08/21/316222594-3471214863152813-531-5319-3204-1692602206.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=jIfZ_imTBAzXv25MX78IKA" alt="Đại học Thủy Lợi" 
+              class="rounded-lg shadow-lg object-cover h-full">
           </div>
           <div class="lg:w-1/2">
-            <h2 class="text-3xl font-bold mb-6">{{ t('landing.about.title') }}</h2>
-            <p class="text-gray-600 mb-6">{{ t('landing.about.description') }}</p>
+            <h2 class="text-3xl font-bold mb-6">Về Trường Đại học Thủy Lợi</h2>
+            <p class="text-muted-foreground mb-6">Trường Đại học Thủy Lợi là trường đại học công lập trọng điểm quốc gia Việt Nam, được thành lập từ năm 1959. Trường chuyên đào tạo về lĩnh vực thủy lợi, tài nguyên nước, kỹ thuật hạ tầng, môi trường và nhiều ngành khoa học kỹ thuật khác.</p>
             <div class="grid grid-cols-2 gap-6 mb-8">
               <div>
-                <div class="text-3xl font-bold text-primary mb-2">1200+</div>
-                <p class="text-gray-600">{{ t('landing.about.courseVariety') }}</p>
+                <div class="text-3xl font-bold text-primary mb-2">65+</div>
+                <p class="text-muted-foreground">Năm phát triển và đào tạo</p>
               </div>
               <div>
-                <div class="text-3xl font-bold text-primary mb-2">250+</div>
-                <p class="text-gray-600">{{ t('landing.about.professionalInstructors') }}</p>
+                <div class="text-3xl font-bold text-primary mb-2">300+</div>
+                <p class="text-muted-foreground">Giảng viên và nhà nghiên cứu</p>
               </div>
               <div>
-                <div class="text-3xl font-bold text-primary mb-2">15,000+</div>
-                <p class="text-gray-600">{{ t('landing.about.registeredStudents') }}</p>
+                <div class="text-3xl font-bold text-primary mb-2">24,066+</div>
+                <p class="text-muted-foreground">Sinh viên đang theo học</p>
               </div>
               <div>
-                <div class="text-3xl font-bold text-primary mb-2">98%</div>
-                <p class="text-gray-600">{{ t('landing.about.satisfactionRate') }}</p>
+                <div class="text-3xl font-bold text-primary mb-2">45+</div>
+                <p class="text-muted-foreground">Ngành đào tạo</p>
               </div>
             </div>
-            <NuxtLink to="/#contact" class="btn btn-primary">
-              {{ t('landing.about.contactUs') }}
-            </NuxtLink>
+            <div class="space-x-4">
+              <NuxtLink to="/history">
+                <Button variant="outline">
+                  Lịch sử phát triển
+                </Button>
+              </NuxtLink>
+              <a href="https://www.tlu.edu.vn" target="_blank" rel="noopener noreferrer">
+                <Button variant="secondary">
+                  Website chính thức
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-16">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold mb-4">{{ t('landing.contact.title') }}</h2>
-          <p class="max-w-2xl mx-auto">{{ t('landing.contact.description') }}</p>
+    <section class="py-16">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">Liên hệ hỗ trợ</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto mb-8">Nếu bạn cần hỗ trợ về hệ thống, vui lòng liên hệ với chúng tôi qua các kênh sau</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardContent class="pt-6">
+              <div class="flex flex-col items-center">
+                <div class="p-3 rounded-full bg-primary/10 text-primary mb-4">
+                  <Icon icon="heroicons:envelope" class="h-6 w-6" />
+                </div>
+                <h3 class="font-medium mb-2">Email</h3>
+                <p class="text-muted-foreground mb-4">daotao@tlu.edu.vn</p>
+                <a href="mailto:daotao@tlu.edu.vn">
+                  <Button variant="outline" size="sm">Gửi email</Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardContent class="pt-6">
+              <div class="flex flex-col items-center">
+                <div class="p-3 rounded-full bg-primary/10 text-primary mb-4">
+                  <Icon icon="heroicons:phone" class="h-6 w-6" />
+                </div>
+                <h3 class="font-medium mb-2">Điện thoại</h3>
+                <p class="text-muted-foreground mb-4">024.3852.2201</p>
+                <a href="tel:+842438522201">
+                  <Button variant="outline" size="sm">Gọi ngay</Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card class="overflow-hidden border-border/50 transition-all duration-200 hover:shadow-md">
+            <CardContent class="pt-6">
+              <div class="flex flex-col items-center">
+                <div class="p-3 rounded-full bg-primary/10 text-primary mb-4">
+                  <Icon icon="heroicons:map-pin" class="h-6 w-6" />
+                </div>
+                <h3 class="font-medium mb-2">Địa chỉ</h3>
+                <p class="text-muted-foreground mb-4">175 Tây Sơn, Đống Đa, Hà Nội</p>
+                <a href="https://maps.app.goo.gl/dCDR4KH9z3U27RkL8" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">Xem bản đồ</Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <Card class="mx-auto max-w-3xl py-0 border-none box-shadow-none">
-          <div class="rounded-lg p-8">
-            <form>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label for="name" class="block text-sm font-medium mb-1">{{ t('landing.contact.name')
-                    }}</label>
-                  <input type="text" id="name"
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary"
-                    :placeholder="t('landing.contact.namePlaceholder')">
-                </div>
-                <div>
-                  <label for="email" class="block text-sm font-medium mb-1">{{ t('landing.contact.email')
-                    }}</label>
-                  <input type="email" id="email"
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary"
-                    :placeholder="t('landing.contact.emailPlaceholder')">
-                </div>
-              </div>
-              <div class="mb-6">
-                <label for="subject" class="block text-sm font-medium mb-1">{{
-                  t('landing.contact.subject')
-                  }}</label>
-                <input type="text" id="subject"
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary"
-                  :placeholder="t('landing.contact.subjectPlaceholder')">
-              </div>
-              <div class="mb-6">
-                <label for="message" class="block text-sm font-medium mb-1">{{
-                  t('landing.contact.message')
-                  }}</label>
-                <textarea id="message" rows="5"
-                  class="w-full px-4 py-2 border rounded-lg focus:ring-primary focus:border-primary"
-                  :placeholder="t('landing.contact.messagePlaceholder')"></textarea>
-              </div>
-              <div class="text-center">
-                <Button type="submit" class="btn text-white btn-primary px-8">
-                  {{ t('landing.contact.sendMessage') }}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </Card>
       </div>
     </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Label from '~/components/ui/label/Label.vue';
-
+import { Icon } from '@iconify/vue';
 const { t } = useLanguage();
+const router = useRouter();
 
 definePageMeta({
   layout: 'landing'
 });
 
 useHead({
-  title: t('landing.hero.title'),
+  title: 'Hệ thống quản lý đào tạo - Đại học Thủy Lợi',
   meta: [
     {
       name: 'description',
-      content: t('landing.hero.subtitle')
+      content: 'Hệ thống quản lý đào tạo trực tuyến Trường Đại học Thủy Lợi'
     }
   ]
+});
+
+onMounted(() => {
+  // Kiểm tra nếu người dùng đã đăng nhập thì redirect về trang tương ứng
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('user_role');
+  
+  if (token && userRole) {
+    switch (userRole) {
+      case 'SuperAdmin':
+        router.push('/super-admin/dashboard');
+        break;
+      case 'AdminSchools':
+        router.push('/admin/dashboard');
+        break;
+      case 'Teacher':
+        router.push('/teacher/dashboard');
+        break;
+      case 'Student':
+        router.push('/student/dashboard');
+        break;
+    }
+  }
 });
 </script>
 

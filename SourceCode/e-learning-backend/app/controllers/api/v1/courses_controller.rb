@@ -1,36 +1,35 @@
 module Api
   module V1
-    class CoursesController < ApplicationController
-      before_action :authenticate_user
+    class CoursesController < Api::BaseController
       before_action :require_admin_schools
 
       def index
         courses = Course.where(school_id: @current_user.school_id)
-        render json: courses
+        respond_with_collection(courses)
       end
 
       def create
         course = Course.new(course_params.merge(school_id: @current_user.school_id))
         if course.save
-          render json: course, status: :created
+          respond_with_resource(course, {}, :created)
         else
-          render json: course.errors, status: :unprocessable_entity
+          respond_with_errors(course.errors.full_messages)
         end
       end
 
       def update
         course = Course.find(params[:id])
         if course.update(course_params)
-          render json: course
+          respond_with_resource(course)
         else
-          render json: course.errors, status: :unprocessable_entity
+          respond_with_errors(course.errors.full_messages)
         end
       end
 
       def destroy
         course = Course.find(params[:id])
         course.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       private

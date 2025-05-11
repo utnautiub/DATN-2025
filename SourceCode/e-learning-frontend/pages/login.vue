@@ -121,12 +121,12 @@ const handleInitialLogin = async () => {
       // Nếu trùng username, hiển thị dropdown chọn trường
       schools.value = response.data.schools || [];
       requiresSchoolSelection.value = true;
-    } else {
+    } else if (response.data.user && response.data.token) {
       // Nếu không trùng username, đăng nhập thành công hoặc báo lỗi
       const { user, token } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user_role', user.role);
-      localStorage.setItem('school_id', String(user.school_id));
+      localStorage.setItem('school_id', String(user.school_id || ''));
 
       switch (user.role) {
         case 'SuperAdmin':
@@ -144,6 +144,8 @@ const handleInitialLogin = async () => {
         default:
           error.value = t('login.invalidRole');
       }
+    } else {
+      error.value = t('login.invalidResponse');
     }
   } catch (err: any) {
     console.error('Initial login error:', err);
@@ -164,26 +166,30 @@ const handleFinalLogin = async () => {
       school_id: school_id.value,
     });
 
-    const { user, token } = response.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user_role', user.role);
-    localStorage.setItem('school_id', String(user.school_id));
+    if (response.data.user && response.data.token) {
+      const { user, token } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user_role', user.role);
+      localStorage.setItem('school_id', String(user.school_id || ''));
 
-    switch (user.role) {
-      case 'SuperAdmin':
-        router.push('/super-admin/dashboard');
-        break;
-      case 'AdminSchools':
-        router.push('/admin/dashboard');
-        break;
-      case 'Teacher':
-        router.push('/teacher/dashboard');
-        break;
-      case 'Student':
-        router.push('/student/dashboard');
-        break;
-      default:
-        error.value = t('login.invalidRole');
+      switch (user.role) {
+        case 'SuperAdmin':
+          router.push('/super-admin/dashboard');
+          break;
+        case 'AdminSchools':
+          router.push('/admin/dashboard');
+          break;
+        case 'Teacher':
+          router.push('/teacher/dashboard');
+          break;
+        case 'Student':
+          router.push('/student/dashboard');
+          break;
+        default:
+          error.value = t('login.invalidRole');
+      }
+    } else {
+      error.value = t('login.invalidResponse');
     }
   } catch (err: any) {
     console.error('Final login error:', err);

@@ -1,0 +1,33 @@
+# Danh sách controllers cần cập nhật
+
+## Các controllers thông thường với Admin Schools
+- classes_controller.rb
+- departments_controller.rb
+- equipment_items_controller.rb
+- majors_controller.rb
+- rooms_controller.rb
+- subjects_controller.rb
+- training_programs_controller.rb
+- user_groups_controller.rb
+
+## Controllers có xử lý đặc biệt
+- enrollments_controller.rb (Liên quan đến đăng ký khóa học)
+- room_equipments_controller.rb (Có quan hệ phức tạp)
+- schedules_controller.rb (Logic lịch trình phức tạp)
+- schools_controller.rb (Chỉ dành cho SuperAdmin)
+- subject_assignments_controller.rb (Gán môn học cho giáo viên)
+- teachers_controller.rb (Xử lý thông tin giáo viên)
+- training_program_subjects_controller.rb (Gán môn học cho chương trình đào tạo)
+
+# Hướng dẫn cập nhật
+
+1. Cho mỗi controller thông thường:
+   - Kế thừa từ Api::BaseController
+   - Xóa phương thức authenticate_user và require_admin_schools (đã thêm qua Authenticable concern)
+   - Sử dụng các phương thức của Responder: respond_with_collection, respond_with_resource, respond_with_errors, respond_with_no_content
+   - Thêm method model_class để trả về model tương ứng
+
+2. Cho controllers đặc biệt:
+   - Xác định chính xác permissions cần thiết 
+   - Đảm bảo giữ nguyên logic nghiệp vụ nhưng refactor code
+   - Tách logic phức tạp vào services nếu cần 

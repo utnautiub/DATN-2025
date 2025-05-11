@@ -1,19 +1,18 @@
 module Api
   module V1
-    class SchedulesController < ApplicationController
-      before_action :authenticate_user
-      before_action :require_admin_schools, only: [:create, :update, :destroy]
-      before_action :require_teacher_or_admin, only: [:create_meet_link]
+    class SchedulesController < Api::BaseController
+      before_action :require_admin_schools, only: [ :create, :update, :destroy ]
+      before_action :require_teacher_or_admin, only: [ :create_meet_link ]
 
       def index
-        if @current_user.role == 'AdminSchools'
+        if @current_user.role == "AdminSchools"
           schedules = Schedule.joins(:course).where(courses: { school_id: @current_user.school_id })
-        elsif @current_user.role == 'Teacher'
+        elsif @current_user.role == "Teacher"
           schedules = Schedule.joins(:course).where(courses: { teacher_id: @current_user.teacher.id })
         else
           schedules = Schedule.joins(:course).where(courses: { school_id: @current_user.student.school_id })
         end
-        render json: schedules
+        respond_with_collection(schedules)
       end
 
       def create
@@ -22,25 +21,25 @@ module Api
           schedule.meet_link = nil
         end
         if schedule.save
-          render json: schedule, status: :created
+          respond_with_resource(schedule, {}, :created)
         else
-          render json: schedule.errors, status: :unprocessable_entity
+          respond_with_errors(schedule.errors.full_messages)
         end
       end
 
       def update
         schedule = Schedule.find(params[:id])
         if schedule.update(schedule_params)
-          render json: schedule
+          respond_with_resource(schedule)
         else
-          render json: schedule.errors, status: :unprocessable_entity
+          respond_with_errors(schedule.errors.full_messages)
         end
       end
 
       def destroy
         schedule = Schedule.find(params[:id])
         schedule.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       def create_meet_link
@@ -48,7 +47,7 @@ module Api
         teacher = schedule.course.teacher.user
 
         unless teacher.google_access_token && teacher.google_token_expiry > Time.now
-          render json: { error: "Giáo viên cần liên kết tài khoản Google" }, status: :unprocessable_entity
+          respond_with_errors([ "Giáo viên cần liên kết tài khoản Google" ])
           return
         end
 
@@ -67,10 +66,10 @@ module Api
           )
         )
 
-        result = client.insert_event('primary', event, conference_data_version: 1)
+        result = client.insert_event("primary", event, conference_data_version: 1)
         schedule.update(meet_link: result.hangout_link)
 
-        render json: schedule
+        respond_with_resource(schedule)
       end
 
       private
@@ -80,7 +79,7 @@ module Api
       end
 
       def require_teacher_or_admin
-        render json: { error: 'Forbidden' }, status: :forbidden unless ['AdminSchools', 'Teacher'].include?(@current_user.role)
+        render json: { error: "Forbidden" }, status: :forbidden unless [ "AdminSchools", "Teacher" ].include?(@current_user.role)
       end
     end
   end

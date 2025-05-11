@@ -4,6 +4,7 @@
       'top-0 sm:top-4 z-50',
       !isDisableHeaderScroll && 'sticky'
     )">
+      <!-- Phần header giữ nguyên -->
       <div :class="cn(
         'mx-auto flex justify-between gap-10 items-center transition-all duration-300 p-4 z-50',
         isScrolled
@@ -90,17 +91,47 @@
       </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
-    <Button v-if="showScrollToTop" variant="outline" size="icon"
-      class="size-10 !bg-zinc-900/80 backdrop-blur-md rounded-xl p-2 hover:scale-110 duration-300 fixed bottom-10 right-8 md:right-10 z-[9999]"
-      @click="scrollToTop">
-      <Icon icon="heroicons:arrow-up" class="text-white h-5 w-5" />
-    </Button>
+    <!-- Scroll to Top Button mới với hiển thị phần trăm -->
+    <div v-if="showScrollToTop" 
+         class="fixed bottom-10 right-8 md:right-10 z-[9999] flex items-center justify-center"
+         @click="scrollToTop">
+      <div class="relative size-12 cursor-pointer group">
+        <!-- Circular progress - Chỉ hiển thị progress, không hiển thị nền -->
+        <svg class="size-12 rotate-[-90deg]" viewBox="0 0 100 100">
+          <!-- Ẩn circle nền -->
+          <circle 
+            class="opacity-0" 
+            stroke-width="8" 
+            stroke="currentColor" 
+            fill="transparent" 
+            r="42" 
+            cx="50" 
+            cy="50" />
+          <!-- Circle progress hiển thị theo % cuộn -->
+          <circle 
+            class="text-primary transition-all duration-300" 
+            stroke-width="8" 
+            :stroke-dasharray="circumference" 
+            :stroke-dashoffset="dashoffset" 
+            stroke-linecap="round" 
+            stroke="currentColor" 
+            fill="transparent" 
+            r="42" 
+            cx="50" 
+            cy="50" />
+        </svg>
+        
+        <!-- Nút chỉ hiển thị mũi tên, không hiển thị phần trăm -->
+        <div class="absolute top-0 left-0 size-full flex items-center justify-center bg-white dark:bg-zinc-900 rounded-full shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:scale-105">
+          <Icon icon="heroicons:arrow-up" class="h-5 w-5 text-primary group-hover:animate-bounce" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { cn } from '@/lib/utils';
 import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
@@ -123,11 +154,19 @@ const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
 const showScrollToTop = ref(false);
 const lastScrollY = ref(0);
+const scrollPercentage = ref(0);
+
+// Thêm biến cho vòng tròn hiển thị phần trăm
+const circumference = 2 * Math.PI * 42;
+const dashoffset = computed(() => {
+  return circumference * (1 - scrollPercentage.value / 100);
+});
 
 const isDisableHeaderScroll = [''].includes(route.path);
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   const scrollThreshold = 60;
 
   if (isDisableHeaderScroll) {
@@ -141,6 +180,9 @@ const handleScroll = () => {
     isScrolled.value = true;
   }
 
+  // Tính toán phần trăm cuộn trang
+  scrollPercentage.value = scrollHeight > 0 ? (currentScrollY / scrollHeight) * 100 : 0;
+  
   showScrollToTop.value = currentScrollY > 100;
   lastScrollY.value = currentScrollY;
 };
@@ -162,4 +204,6 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Thêm các hiệu ứng và chuyển động nếu cần */
+</style>

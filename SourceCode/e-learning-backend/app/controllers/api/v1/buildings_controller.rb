@@ -1,36 +1,35 @@
 module Api
   module V1
-    class BuildingsController < ApplicationController
-      before_action :authenticate_user
+    class BuildingsController < Api::BaseController
       before_action :require_admin_schools
 
       def index
         buildings = Building.where(school_id: @current_user.school_id)
-        render json: buildings
+        respond_with_collection(buildings)
       end
 
       def create
         building = Building.new(building_params.merge(school_id: @current_user.school_id))
         if building.save
-          render json: building, status: :created
+          respond_with_resource(building, {}, :created)
         else
-          render json: building.errors, status: :unprocessable_entity
+          respond_with_errors(building.errors.full_messages)
         end
       end
 
       def update
-        building = Building.find(params[:id])
+        building = Building.where(school_id: @current_user.school_id).find(params[:id])
         if building.update(building_params)
-          render json: building
+          respond_with_resource(building)
         else
-          render json: building.errors, status: :unprocessable_entity
+          respond_with_errors(building.errors.full_messages)
         end
       end
 
       def destroy
-        building = Building.find(params[:id])
+        building = Building.where(school_id: @current_user.school_id).find(params[:id])
         building.destroy
-        head :no_content
+        respond_with_no_content
       end
 
       private
@@ -39,18 +38,8 @@ module Api
         params.permit(:name, :latitude, :longitude)
       end
 
-      def authenticate_user
-        token = request.headers['Authorization']&.split(' ')&.last
-        begin
-          decoded = JWT.decode(token, 'your_secret_key', true, algorithm: 'HS256')
-          @current_user = User.find(decoded[0]['user_id'])
-        rescue
-          render json: { error: 'Unauthorized' }, status: :unauthorized
-        end
-      end
-
-      def require_admin_schools
-        render json: { error: 'Forbidden' }, status: :forbidden unless @current_user.role == 'AdminSchools'
+      def model_class
+        Building
       end
     end
   end
