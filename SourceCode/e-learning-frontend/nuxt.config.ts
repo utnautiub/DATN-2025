@@ -59,7 +59,7 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-    strategy: 'prefix_except_default',
+    strategy: 'no_prefix',
   },
   build: {
     transpile: ['@vue-leaflet/vue-leaflet'],

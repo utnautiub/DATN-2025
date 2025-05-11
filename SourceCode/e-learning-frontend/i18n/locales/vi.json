@@ -1,4 +1,9 @@
 {
+  "languages": {
+    "en": "English",
+    "vi": "Tiếng Việt",
+    "lo": "ພາສາລາວ"
+  },
   "common": {
     "appName": "Học trực tuyến Đại Học Thủy Lợi",
     "login": "Đăng nhập",
@@ -8,6 +13,7 @@
     "about": "Về chúng tôi",
     "contact": "Liên hệ",
     "email": "Email",
+    "username": "Tên tài khoản",
     "password": "Mật khẩu",
     "rememberMe": "Ghi nhớ đăng nhập",
     "forgotPassword": "Quên mật khẩu?",
@@ -21,7 +27,19 @@
     "theme": "Giao diện",
     "darkMode": "Chế độ tối",
     "lightMode": "Chế độ sáng",
-    "colorThemes": "Màu sắc giao diện"
+    "colorThemes": "Màu sắc giao diện",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy bỏ",
+    "save": "Lưu",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước đó",
+    "selectLanguage": "Chọn ngôn ngữ"
   },
   "login": {
     "title": "Đăng nhập vào hệ thống",
@@ -94,7 +112,62 @@
     "home": "Trang chủ",
     "courses": "Khóa học",
     "history": "Lịch sử",
-    "about": "Giới thiệu"
+    "about": "Giới thiệu",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "logout": "Đăng xuất",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "loginSuccess": "Đăng nhập thành công",
+    "loginFailed": "Đăng nhập thất bại",
+    "registerSuccess": "Đăng ký thành công",
+    "registerFailed": "Đăng ký thất bại"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "changePassword": "Đổi mật khẩu",
+    "settings": "Cài đặt",
+    "personalInfo": "Thông tin cá nhân",
+    "fullName": "Họ và tên",
+    "phoneNumber": "Số điện thoại",
+    "address": "Địa chỉ",
+    "birthday": "Ngày sinh",
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "other": "Khác"
+  },
+  "courses": {
+    "title": "Khóa học",
+    "allCourses": "Tất cả khóa học",
+    "myCourses": "Khóa học của tôi",
+    "popularCourses": "Khóa học phổ biến",
+    "newCourses": "Khóa học mới",
+    "freeCourses": "Khóa học miễn phí",
+    "paidCourses": "Khóa học trả phí",
+    "courseDetails": "Chi tiết khóa học",
+    "enrollNow": "Đăng ký ngay",
+    "startLearning": "Bắt đầu học",
+    "continueLeaning": "Tiếp tục học",
+    "completed": "Đã hoàn thành",
+    "inProgress": "Đang học",
+    "notStarted": "Chưa bắt đầu"
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc",
+    "email": "Email không hợp lệ",
+    "minLength": "Tối thiểu {length} ký tự",
+    "maxLength": "Tối đa {length} ký tự",
+    "passwordMatch": "Mật khẩu không khớp",
+    "invalidFormat": "Định dạng không hợp lệ"
   },
   "landing": {
     "hero": {
@@ -145,6 +218,117 @@
       "emailPlaceholder": "Nhập email",
       "subjectPlaceholder": "Nhập tiêu đề",
       "messagePlaceholder": "Nhập nội dung"
+    }
+  },
+  "homepage": {
+    "title": "Hệ Thống Quản Lý Đào Tạo",
+    "subtitle": "Trường Đại học Thủy Lợi",
+    "login": "Đăng nhập hệ thống",
+    "learnMore": "Tìm hiểu thêm",
+    "features": {
+      "title": "Tính năng hệ thống",
+      "description": "Hệ thống quản lý đào tạo trực tuyến giúp sinh viên, giảng viên và cán bộ quản lý dễ dàng truy cập thông tin và nguồn tài nguyên học tập",
+      "learning": {
+        "title": "Quản lý học tập",
+        "description": "Truy cập thông tin khóa học, lịch học và tài liệu học tập",
+        "feature1": "Quản lý thời khóa biểu",
+        "feature2": "Truy cập tài liệu học tập",
+        "feature3": "Theo dõi kết quả học tập"
+      },
+      "management": {
+        "title": "Quản lý đào tạo",
+        "description": "Công cụ hiệu quả cho cán bộ quản lý và giảng viên",
+        "feature1": "Quản lý lớp học và khóa học",
+        "feature2": "Điểm danh và đánh giá học tập",
+        "feature3": "Quản lý chương trình đào tạo"
+      },
+      "reporting": {
+        "title": "Báo cáo & Thống kê",
+        "description": "Công cụ phân tích dữ liệu và báo cáo",
+        "feature1": "Thống kê điểm số và kết quả",
+        "feature2": "Theo dõi tiến độ học tập",
+        "feature3": "Báo cáo tổng hợp thông tin đào tạo"
+      }
+    },
+    "about": {
+      "title": "Về Trường Đại học Thủy Lợi",
+      "description": "Trường Đại học Thủy Lợi là trường đại học công lập trọng điểm quốc gia Việt Nam, được thành lập từ năm 1959. Trường chuyên đào tạo về lĩnh vực thủy lợi, tài nguyên nước, kỹ thuật hạ tầng, môi trường và nhiều ngành khoa học kỹ thuật khác.",
+      "years": "Năm phát triển và đào tạo",
+      "teachers": "Giảng viên và nhà nghiên cứu",
+      "students": "Sinh viên đang theo học",
+      "programs": "Ngành đào tạo",
+      "history": "Lịch sử phát triển",
+      "officialWebsite": "Website chính thức"
+    },
+    "contact": {
+      "title": "Liên hệ hỗ trợ",
+      "description": "Nếu bạn cần hỗ trợ về hệ thống, vui lòng liên hệ với chúng tôi qua các kênh sau",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "address": "Địa chỉ",
+      "sendEmail": "Gửi email",
+      "callNow": "Gọi ngay",
+      "viewMap": "Xem bản đồ"
+    }
+  },
+  "history": {
+    "pageTitle": "Lịch sử phát triển - Đại học Thủy Lợi",
+    "pageDescription": "Hành trình phát triển của Trường Đại học Thủy Lợi từ năm 1959 đến nay",
+    "timeline": {
+      "1959": {
+        "title": "1959",
+        "content": "Thành lập Học viện Thủy Lợi và Điện Lực, đặt nền móng cho đào tạo kỹ sư thủy lợi và thủy điện tại Việt Nam.",
+        "imgAlt": "Trụ sở chính tại Hà Nội",
+        "imgCaption": "Trụ sở Học viện Thủy Lợi và Điện Lực năm 1959"
+      },
+      "1964": {
+        "title": "1964",
+        "content": "Đổi tên thành Trường Đại học Thủy Lợi, chính thức mở rộng đào tạo và nghiên cứu chuyên ngành thủy lợi.",
+        "imgAlt": "Lễ khánh thành trường",
+        "imgCaption": "Lễ khánh thành Đại học Thủy Lợi năm 1964"
+      },
+      "1997": {
+        "title": "1997",
+        "content": "Trường mở rộng cơ sở đào tạo tại TP.HCM, đánh dấu bước phát triển quan trọng cho việc mở rộng đào tạo thủy lợi ở miền Nam.",
+        "imgAlt": "Cơ sở 2",
+        "imgCaption": "Cơ sở 2 tại TP.HCM, mở rộng năm 1997"
+      },
+      "2001": {
+        "title": "2001",
+        "content": "Trường mở ngành Công nghệ Thông tin và thành lập Khoa Công nghệ Thông tin, đánh dấu sự mở rộng sang lĩnh vực công nghệ mới.",
+        "imgAlt": "Logo Đại học Thủy lợi",
+        "imgCaption": "Mở ngành Công nghệ Thông tin năm 2001"
+      },
+      "2006": {
+        "title": "2006",
+        "content": "Trường bắt đầu áp dụng chiến lược phát triển 2006-2020, tập trung vào đào tạo đa ngành, bao gồm Công nghệ Thông tin.",
+        "imgAlt": "Đại học Thủy lợi",
+        "imgCaption": "Chiến lược phát triển đa ngành 2006-2020"
+      },
+      "2012": {
+        "title": "2012",
+        "content": "Thành lập Trung tâm Đào tạo Quốc tế, mở rộng hợp tác quốc tế và cung cấp chương trình đào tạo đạt chuẩn quốc tế.",
+        "imgAlt": "Trung tâm đào tạo quốc tế",
+        "imgCaption": "Trung tâm Đào tạo Quốc tế thành lập năm 2012"
+      },
+      "2015": {
+        "title": "2015",
+        "content": "Hợp tác với Samsung Electronics phát triển phòng lab CNTT và tuyển dụng sinh viên ngành Công nghệ Thông tin sau khi tốt nghiệp.",
+        "imgAlt": "Hợp tác CNTT",
+        "imgCaption": "Hợp tác với Samsung Electronics năm 2015"
+      },
+      "2019": {
+        "title": "2019",
+        "content": "Kỷ niệm 60 năm thành lập trường, đánh dấu chặng đường phát triển và đóng góp cho ngành thủy lợi Việt Nam.",
+        "imgAlt": "Chương trình đào tạo CNTT",
+        "imgCaption": "Kỷ niệm 60 năm thành lập trường năm 2019"
+      },
+      "2024": {
+        "title": "2024",
+        "content": "Kỷ niệm 65 năm thành lập Trường Đại học Thủy lợi, đẩy mạnh các chương trình nghiên cứu ứng dụng trong ngành Công nghệ Thông tin và Thủy lợi.",
+        "imgAlt": "Kỷ niệm 65 năm",
+        "imgCaption": "Kỷ niệm 65 năm thành lập Trường Đại học Thủy lợi năm 2024"
+      }
     }
   }
 }

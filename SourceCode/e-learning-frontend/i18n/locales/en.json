@@ -4,10 +4,114 @@
     "vi": "Tiếng Việt",
     "lo": "ພາສາລາວ"
   },
+  "common": {
+    "appName": "Online Learning Platform",
+    "login": "Login",
+    "logout": "Logout",
+    "home": "Home",
+    "courses": "Courses",
+    "about": "About",
+    "contact": "Contact",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot Password?",
+    "backToHome": "Back to Home",
+    "search": "Search",
+    "viewAll": "View All",
+    "welcome": "Welcome",
+    "settings": "Settings",
+    "profile": "Profile",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "colorThemes": "Color Themes",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "selectLanguage": "Select Language"
+  },
+  "login": {
+    "title": "Login to the system",
+    "quickLogin": "Quick login for testing:",
+    "admin": "Administrator",
+    "teacher": "Teacher",
+    "student": "Student",
+    "invalidCredentials": "Invalid email or password",
+    "error": "An error occurred while logging in"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "welcome": "Hello Admin, welcome back to the administration system.",
+    "users": "User Management",
+    "courses": "Course Management",
+    "reports": "Reports",
+    "settings": "System Settings",
+    "stats": {
+      "totalUsers": "Total Users",
+      "courses": "Courses",
+      "completed": "Completed",
+      "revenue": "Revenue"
+    },
+    "recentActivity": {
+      "title": "Recent Activity"
+    },
+    "newUsers": {
+      "title": "New Users"
+    },
+    "quickActions": {
+      "title": "Quick Actions"
+    }
+  },
+  "teacher": {
+    "dashboard": "Teacher Dashboard",
+    "welcome": "Hello Teacher, welcome back to the course management system.",
+    "myCourses": "My Courses",
+    "assignments": "Assignments",
+    "students": "Students",
+    "calendar": "Teaching Schedule",
+    "messages": "Messages",
+    "stats": {
+      "myCourses": "My Courses",
+      "students": "Students",
+      "ratings": "Ratings",
+      "income": "Income"
+    }
+  },
+  "student": {
+    "dashboard": "Student Dashboard",
+    "welcome": "Hello {name}, welcome back to your learning journey.",
+    "myCourses": "My Courses",
+    "progress": "Learning Progress",
+    "assignments": "Assignments",
+    "catalog": "Course Catalog",
+    "messages": "Messages",
+    "stats": {
+      "coursesInProgress": "Courses in Progress",
+      "coursesCompleted": "Courses Completed",
+      "certificatesEarned": "Certificates Earned",
+      "learningHours": "Learning Hours"
+    },
+    "learningStreak": {
+      "title": "Learning Streak",
+      "days": "consecutive days",
+      "keepStreak": "Keep your streak to earn rewards!"
+    }
+  },
   "navigation": {
     "home": "Home",
     "courses": "Courses",
-    "history": "Learning History",
+    "history": "History",
     "about": "About",
     "profile": "Profile",
     "settings": "Settings"
@@ -25,23 +129,6 @@
     "loginFailed": "Login failed",
     "registerSuccess": "Registration successful",
     "registerFailed": "Registration failed"
-  },
-  "common": {
-    "appName": "Online Learning Platform",
-    "search": "Search",
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Success",
-    "cancel": "Cancel",
-    "save": "Save",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "welcome": "Welcome",
-    "selectLanguage": "Select Language"
   },
   "profile": {
     "title": "Profile",
@@ -126,7 +213,122 @@
       "email": "Email",
       "subject": "Subject",
       "message": "Message",
-      "sendMessage": "Send Message"
+      "sendMessage": "Send Message",
+      "namePlaceholder": "Enter your name",
+      "emailPlaceholder": "Enter your email",
+      "subjectPlaceholder": "Enter subject",
+      "messagePlaceholder": "Enter your message"
+    }
+  },
+  "homepage": {
+    "title": "Learning Management System",
+    "subtitle": "Thuy Loi University",
+    "login": "Log in to the system",
+    "learnMore": "Learn more",
+    "features": {
+      "title": "System Features",
+      "description": "Our online learning management system helps students, teachers, and administrative staff easily access information and learning resources",
+      "learning": {
+        "title": "Learning Management",
+        "description": "Access course information, schedules, and learning materials",
+        "feature1": "Schedule management",
+        "feature2": "Access learning materials",
+        "feature3": "Track learning outcomes"
+      },
+      "management": {
+        "title": "Training Management",
+        "description": "Effective tools for administrators and teachers",
+        "feature1": "Manage classes and courses",
+        "feature2": "Attendance and assessment",
+        "feature3": "Curriculum management"
+      },
+      "reporting": {
+        "title": "Reports & Statistics",
+        "description": "Data analysis and reporting tools",
+        "feature1": "Grade and result statistics",
+        "feature2": "Track learning progress",
+        "feature3": "Comprehensive training reports"
+      }
+    },
+    "about": {
+      "title": "About Thuy Loi University",
+      "description": "Thuy Loi University is a key national public university in Vietnam, established in 1959. The university specializes in water resources, hydraulic engineering, infrastructure technology, environment, and many other technical sciences.",
+      "years": "Years of development and training",
+      "teachers": "Faculty members and researchers",
+      "students": "Currently enrolled students",
+      "programs": "Training programs",
+      "history": "Development history",
+      "officialWebsite": "Official website"
+    },
+    "contact": {
+      "title": "Support Contact",
+      "description": "If you need assistance with the system, please contact us through the following channels",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "sendEmail": "Send email",
+      "callNow": "Call now",
+      "viewMap": "View map"
+    }
+  },
+  "history": {
+    "pageTitle": "Development History - Thuy Loi University",
+    "pageDescription": "The development journey of Thuy Loi University from 1959 to present",
+    "timeline": {
+      "1959": {
+        "title": "1959",
+        "content": "Establishment of the Institute of Hydraulic Engineering and Electricity, laying the foundation for hydraulic engineering and hydropower engineer training in Vietnam.",
+        "imgAlt": "Main campus in Hanoi",
+        "imgCaption": "The Institute of Hydraulic Engineering and Electricity in 1959"
+      },
+      "1964": {
+        "title": "1964",
+        "content": "Renamed to Thuy Loi University, officially expanding training and research in the field of water resources.",
+        "imgAlt": "University inauguration ceremony",
+        "imgCaption": "Thuy Loi University inauguration ceremony in 1964"
+      },
+      "1997": {
+        "title": "1997",
+        "content": "The university expanded its training facilities in Ho Chi Minh City, marking an important development for water resources education in the South.",
+        "imgAlt": "Second campus",
+        "imgCaption": "Second campus in Ho Chi Minh City, expanded in 1997"
+      },
+      "2001": {
+        "title": "2001",
+        "content": "The university opened Information Technology programs and established the Faculty of Information Technology, marking the expansion into new technology fields.",
+        "imgAlt": "Thuy Loi University logo",
+        "imgCaption": "Information Technology program launched in 2001"
+      },
+      "2006": {
+        "title": "2006",
+        "content": "The university began implementing its 2006-2020 development strategy, focusing on multi-disciplinary training, including Information Technology.",
+        "imgAlt": "Thuy Loi University",
+        "imgCaption": "Multi-disciplinary development strategy 2006-2020"
+      },
+      "2012": {
+        "title": "2012",
+        "content": "Establishment of the International Training Center, expanding international cooperation and providing internationally standardized training programs.",
+        "imgAlt": "International Training Center",
+        "imgCaption": "International Training Center established in 2012"
+      },
+      "2015": {
+        "title": "2015",
+        "content": "Cooperation with Samsung Electronics to develop IT labs and recruit IT graduates from the university.",
+        "imgAlt": "IT Cooperation",
+        "imgCaption": "Cooperation with Samsung Electronics in 2015"
+      },
+      "2019": {
+        "title": "2019",
+        "content": "60th anniversary of the university's establishment, marking the development journey and contributions to Vietnam's water resources sector.",
+        "imgAlt": "IT Training Program",
+        "imgCaption": "60th anniversary celebration in 2019"
+      },
+      "2024": {
+        "title": "2024",
+        "content": "65th anniversary of Thuy Loi University, promoting applied research programs in Information Technology and Water Resources fields.",
+        "imgAlt": "65th Anniversary",
+        "imgCaption": "65th anniversary of Thuy Loi University in 2024"
+      }
     }
   }
 }

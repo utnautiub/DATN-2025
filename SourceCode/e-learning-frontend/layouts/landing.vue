@@ -13,7 +13,7 @@
       )">
         <!-- Logo -->
         <div class="flex items-center gap-2">
-          <NuxtLink to="/" class="flex items-center" @click="scrollToTop">
+          <NuxtLink :to="localePath('/')" class="flex items-center" @click="scrollToTop">
             <Logo />
           </NuxtLink>
         </div>

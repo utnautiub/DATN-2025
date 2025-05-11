@@ -17,18 +17,19 @@
             stroke-width="2"
             stroke="currentColor"
             fill="none"
-            class="text-gray-300 dark:text-gray-600"
+            class="text-muted dark:text-muted/30"
           />
           <!-- Progress Circle -->
           <circle
             cx="24"
             cy="24"
             r="20"
-            stroke-width="2"
+            stroke-width="3"
             stroke="currentColor"
             fill="none"
             :stroke-dasharray="circumference"
             :stroke-dashoffset="dashOffset"
+            stroke-linecap="round"
             class="text-primary transition-all duration-300"
           />
         </svg>
@@ -37,13 +38,13 @@
         <div 
           class="absolute inset-0 flex items-center justify-center rounded-full transform transition-transform duration-300 group-hover:scale-110"
           :class="[
-            'bg-white dark:bg-gray-800',
+            'bg-background dark:bg-background',
             'shadow-lg hover:shadow-xl'
           ]"
         >
           <Icon 
             icon="heroicons:arrow-up" 
-            class="w-5 h-5 text-primary group-hover:text-primary-dark transition-colors duration-300"
+            class="w-5 h-5 text-primary group-hover:text-primary/90 transition-colors duration-300 group-hover:animate-bounce"
           />
         </div>
 
@@ -60,6 +61,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Icon } from '@iconify/vue';
 
 const showButton = ref(false);
 const scrollPercentage = ref(0);
